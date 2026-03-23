@@ -4,13 +4,10 @@ import * as React from "react";
 import { Provider } from "react-redux";
 
 import { makeStore } from "@/src/store/store";
-
-export interface ProvidersProps {
-  children: React.ReactNode;
-}
+import { providersType } from "../types/providersType";
 
 const store = makeStore();
 
-export function Providers({ children }: ProvidersProps) {
+export function ReduxProvider({ children }: providersType) {
   return <Provider store={store}>{children}</Provider>;
 }

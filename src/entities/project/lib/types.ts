@@ -9,3 +9,9 @@ export interface Project {
   share_token?: string | null;
   created_at?: string | null;
 }
+
+export interface createProjectType {
+  name: string;
+  description?: string | null;
+  status?: ProjectStatus | null;
+}

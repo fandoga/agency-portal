@@ -1,17 +1,13 @@
 "use client";
 
-import { ReactNode } from "react";
 import { AuthProvider } from "../shared/providers/authProvider";
-import { Providers } from "../shared/providers/Providers";
+import { ReduxProvider } from "../shared/providers/reduxProvider";
+import { providersType } from "../shared/types/providersType";
 
-type AppShellProps = {
-  children: ReactNode;
-};
-
-const AppShell = ({ children }: AppShellProps) => {
+const AppShell = ({ children }: providersType) => {
   return (
     <AuthProvider>
-      <Providers>{children}</Providers>
+      <ReduxProvider>{children}</ReduxProvider>
     </AuthProvider>
   );
 };
