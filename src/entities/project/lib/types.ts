@@ -1,4 +1,9 @@
-export type ProjectStatus = "active" | "paused" | "completed";
+export type ProjectStatus =
+  | "wait_review"
+  | "active"
+  | "paused"
+  | "in_progress"
+  | "completed";
 
 export interface Project {
   id: string; // uuid
