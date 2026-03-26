@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+1. Структура страниц (Навигация)
+   Для нижнего навбара я предлагаю 4 основные секции:
 
-## Getting Started
+🏠 Главная (Проекты)
+Что там: Список всех активных проектов.
 
-First, run the development server:
+Элементы: \* Quick Stats: 3-4 карточки сверху (Всего проектов, Задач на ревью, Бюджет/Часы в работе).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Project Card: Тот самый список с разворачивающимися задачами.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Кнопка «+»: Быстрое создание проекта.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+📊 Отчеты (Reporting Center) — Твоя киллер-фича
+Здесь происходит «магия» автоматизации.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Зачем: Чтобы админ видел, какие отчеты уже ушли клиентам, а какие нужно сформировать.
 
-## Learn More
+Элементы:
 
-To learn more about Next.js, take a look at the following resources:
+Генератор: Выбираешь проект -> выбираешь период -> кнопка «Сгенерировать Summary».
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Архив: Список всех отправленных отчетов с пометкой «Просмотрено клиентом» (это очень важно для агентства).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+👥 Клиенты (Access Management)
+Зачем: Управление доступом.
 
-## Deploy on Vercel
+Элементы:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Список клиентов и привязанных к ним проектов.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Magic Link Manager: Кнопка «Скопировать ссылку» для каждого клиента.
+
+Preview Mode: Кнопка «Посмотреть глазами клиента», чтобы админ был уверен, что клиент не видит лишнего.
+
+⚙️ Настройки (Branding)
+Зачем: Сделать портал «своим».
+
+Элементы:
+
+Загрузка логотипа агентства (который будет отображаться на портале клиента).
+
+Выбор основного цвета (Brand Color) для портала.
+
+Данные профиля админа.
+
+2. Ключевые UI-элементы (что добавить в Shadcn/ui)
+   Чтобы интерфейс выглядел профессионально, тебе понадобятся эти компоненты:
+
+Status Badges: Не просто текст, а цветные индикаторы:
+
+In Progress — синий.
+
+On Review — желтый (клиент должен обратить внимание).
+
+Done — зеленый.
+
+Empty States: Самый важный элемент для UX. Если проектов нет, не оставляй пустой экран. Нарисуй красивую иконку и напиши: «Здесь будет ваш первый проект. Давайте создадим его?».
+
+Progress Bar: В каждой карточке проекта покажи визуальную полоску: «Завершено 12 из 15 этапов». Это дает мгновенное чувство прогресса.
+
+Feedback Toasts: При создании задачи или копировании ссылки обязательно показывай всплывающее уведомление.
+
+3. Продуманный Workflow (Сценарий)
+   Давай представим путь админа (агентства) в твоем UI:
+
+Dashboard: Видит, что по проекту «Дизайн мобилки» 2 задачи висят в Review.
+
+Action: Кликает на задачу, пишет комментарий: «Клиент, посмотри этот вариант».
+
+Reporting: Переходит во вкладку Отчеты, нажимает «Сгенерировать отчет за неделю». Система сама собирает эти 2 задачи в красивый текст.
+
+Finish: Нажимает «Отправить», и клиенту улетает уведомление (или админ просто знает, что портал обновился).
+
+4. Что еще может понадобиться? (Level Up)
+   Страница «Архив проектов»: Чтобы завершенные проекты не мешались на главной, но их можно было найти.
+
+Интеграция с хранилищем: На детальной странице проекта нужен блок «Файлы» (ссылки на Figma, Google Docs или загруженные PDF).

@@ -11,6 +11,13 @@ const ProjectDescription = ({ project }: { project: Project }) => {
     review: "bg-orange-500",
   };
 
+  const sortedMilestones = project.milestones?.toSorted((a, b) => {
+    const dateA = a.due_date ? new Date(a.due_date).getTime() : 0;
+    const dateB = b.due_date ? new Date(b.due_date).getTime() : 0;
+
+    return dateA - dateB;
+  });
+
   return (
     <div>
       <p>{project.description}</p>
@@ -18,14 +25,17 @@ const ProjectDescription = ({ project }: { project: Project }) => {
         <div className="pb-3">
           <Separator className="my-3" />
           <ul className="list-none p-0 m-0 space-y-2">
-            {project.milestones?.map((mile) => {
+            {sortedMilestones?.map((mile) => {
               const mileStatus = mile.status ?? "todo";
               const ballColorClass =
                 milestoneBallColorByStatus[mileStatus] ??
                 milestoneBallColorByStatus.todo;
 
               return (
-                <li key={mile.id} className="flex items-start gap-2">
+                <li
+                  key={mile.id}
+                  className="flex cursor-grab items-start gap-2"
+                >
                   <span
                     aria-hidden="true"
                     className={`mt-1.5 rounded-full h-2 w-2 ${ballColorClass}`}

@@ -49,7 +49,6 @@ const ProjectCard = ({ project }: { project: Project }) => {
   //-------------------------------
 
   const [rndmValue] = useState(() => Math.random() * (100 - 0));
-  console.log(rndmValue);
 
   return (
     <Item className="py-3" variant={"outline"}>
