@@ -9,7 +9,7 @@ export const projectApi = baseApi.injectEndpoints({
       queryFn: async (token) => {
         const { data, error } = await supabase
           .from("projects")
-          .select("*, milestones(*)") // Сразу тянем этапы
+          .select("*, milestones(*)")
           .eq("share_token", token)
           .single();
 
@@ -25,7 +25,7 @@ export const projectApi = baseApi.injectEndpoints({
       queryFn: async () => {
         const { data, error } = await supabase
           .from("projects")
-          .select("*")
+          .select("*, milestones(*)")
           .order("created_at", { ascending: false });
 
         if (error) return { error };

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import ProjectDescription from "./ProjectDescription";
 
 const ProjectCard = ({ project }: { project: Project }) => {
   const statusLabelMap: Record<NonNullable<Project["status"]>, string> = {
@@ -36,7 +37,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
   const badgeClassByColor: Record<string, string> = {
     orange:
       "bg-orange-50 text-orange-700 dark:bg-orange-950 dark:text-orange-300",
-    pink: "bg-accent text-white dark:bg-accent dark:text-white",
+    pink: "bg-brand-300 text-white dark:bg-brand-600 dark:text-white",
     red: "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300",
     green: "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300",
     gray: "bg-gray-50 text-gray-700 dark:bg-gray-950 dark:text-gray-300",
@@ -62,7 +63,9 @@ const ProjectCard = ({ project }: { project: Project }) => {
             <AccordionTrigger className="p-0 ">
               <Progress value={rndmValue} className="w-[80%] "></Progress>
             </AccordionTrigger>
-            <AccordionContent> {project.description}</AccordionContent>
+            <AccordionContent className="pb-0">
+              <ProjectDescription project={project} />
+            </AccordionContent>
           </AccordionItem>
         </Accordion>
       </ItemContent>
