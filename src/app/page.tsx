@@ -102,6 +102,6 @@ export default function Home() {
     //     <button onClick={() => handleSignOut()}>ВЫЙТИ</button>
     //   </main>
     // </div>
-    <div className="bg-black h-full w-full"></div>
+    <div></div>
   );
 }
