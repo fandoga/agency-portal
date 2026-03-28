@@ -26,8 +26,6 @@ const CreateProjectModal = () => {
         </AlertDialogTrigger>
         <AlertDialogContent
           onOpenAutoFocus={(e) => {
-            // If focus remains on the trigger while the rest of the app is aria-hidden,
-            // Chrome warns. Move focus into the dialog immediately.
             e.preventDefault();
             queueMicrotask(() => initialFocusRef.current?.focus());
           }}
@@ -37,6 +35,7 @@ const CreateProjectModal = () => {
             Создание нового проекта с указанным статусом, описанием и названием
           </AlertDialogDescription>
           <FormProjectCreate
+            key={open ? "project-form-open" : "project-form-closed"}
             onRequestClose={() => setOpen(false)}
             initialFocusRef={initialFocusRef}
           />

@@ -1,9 +1,17 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Project } from "@/src/entities/project/lib/types";
+import CreateMilestoneModal from "@/src/features/projects/create-milestone/CreateMilestoneModal";
+import { useDeleteMilestoneMutation } from "@/src/entities/milestone/api/milestoneApi";
+import { Trash2 } from "lucide-react";
 import React from "react";
 
 const ProjectDescription = ({ project }: { project: Project }) => {
+  const [deleteMilestone, { isLoading: isDeleting }] =
+    useDeleteMilestoneMutation();
+
   const milestoneBallColorByStatus: Record<string, string> = {
     todo: "bg-gray-400",
     in_progress: "bg-brand-700",
@@ -34,23 +42,46 @@ const ProjectDescription = ({ project }: { project: Project }) => {
               return (
                 <li
                   key={mile.id}
-                  className="flex cursor-grab items-start gap-2"
+                  className="flex cursor-grab items-start gap-2 group"
                 >
                   <span
                     aria-hidden="true"
-                    className={`mt-1.5 rounded-full h-2 w-2 ${ballColorClass}`}
+                    className={`mt-1.5 rounded-full h-2 w-2 shrink-0 ${ballColorClass}`}
                   />
-                  <div>
-                    <h3>{mile.title}</h3>
+                  <div className="min-w-0 flex-1">
+                    <h3>{mile.name}</h3>
                     <p>{mile.description}</p>
                   </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-xs"
+                    className="shrink-0 opacity-70 hover:opacity-100"
+                    disabled={isDeleting}
+                    aria-label="Удалить задачу"
+                    onClick={() => {
+                      void deleteMilestone({
+                        milestoneId: mile.id,
+                        projectId: project.id,
+                      }).unwrap();
+                    }}
+                  >
+                    <Trash2 className="size-4 text-destructive" />
+                  </Button>
                 </li>
               );
             })}
           </ul>
         </div>
       )}
-      <Button size={"xs"}>Новая задача</Button>
+      <CreateMilestoneModal
+        projectId={project.id}
+        trigger={
+          <Button size="xs" type="button">
+            Новая задача
+          </Button>
+        }
+      />
     </div>
   );
 };

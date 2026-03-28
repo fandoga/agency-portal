@@ -9,9 +9,15 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useCreateNewProjectMutation } from "@/src/entities/project/api/projectApi";
 import type { ProjectStatus } from "@/src/entities/project/lib/types";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useCreateNewProjectMutation } from "@/src/entities/project/api/projectApi";
+
+export type ProjectEntityFormValues = {
+  name: string;
+  description: string | null;
+  status: ProjectStatus;
+};
 
 type FormProjectCreateProps = {
   onRequestClose?: () => void;
@@ -42,7 +48,7 @@ const FormProjectCreate = ({
 
   const canSubmit = !isLoading;
 
-  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = async (e) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const trimmed = name.trim();
 
@@ -55,13 +61,14 @@ const FormProjectCreate = ({
 
     try {
       await createNewProject({
-        name: name.trim(),
+        name: trimmed,
         description: description.trim() ? description.trim() : null,
-        status: status,
+        status,
       }).unwrap();
-
       onRequestClose?.();
-    } catch {}
+    } catch {
+      // Ошибка в `error` от RTK
+    }
   };
 
   return (
