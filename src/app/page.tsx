@@ -30,78 +30,56 @@ export default function Home() {
   ] = useCreateNewProjectMutation();
   const [authMode, setAuthMode] = useState<"register" | "login">("register");
 
-  const handleCreateProjectClick = async () => {
-    try {
-      await createNewProject({
-        name: "New Project",
-        description: "Project description",
-        status: "active",
-      }).unwrap();
-    } catch (e) {
-      console.error(e);
-    } finally {
-    }
-  };
-
   return (
-    // <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans">
-    //   <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white sm:items-start">
-    //     {!session ? (
-    //       <>
-    //         <div className="flex gap-2 mb-4">
-    //           <button
-    //             type="button"
-    //             onClick={() => setAuthMode("register")}
-    //             className={authMode === "register" ? "underline" : ""}
-    //           >
-    //             Регистрация
-    //           </button>
-    //           <button
-    //             type="button"
-    //             onClick={() => setAuthMode("login")}
-    //             className={authMode === "login" ? "underline" : ""}
-    //           >
-    //             Логин
-    //           </button>
-    //         </div>
+    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans">
+      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white sm:items-start">
+        {!session ? (
+          <>
+            <div className="flex gap-2 mb-4">
+              <button
+                type="button"
+                onClick={() => setAuthMode("register")}
+                className={authMode === "register" ? "underline" : ""}
+              >
+                Регистрация
+              </button>
+              <button
+                type="button"
+                onClick={() => setAuthMode("login")}
+                className={authMode === "login" ? "underline" : ""}
+              >
+                Логин
+              </button>
+            </div>
 
-    //         {authMode === "register" ? (
-    //           <RegisterForm onRegistered={() => setAuthMode("login")} />
-    //         ) : (
-    //           <LoginForm />
-    //         )}
-    //       </>
-    //     ) : (
-    //       <div>
-    //         <AgencyProjectsPanel />
-    //         <div className="mt-4 flex gap-2 items-center">
-    //           <button
-    //             type="button"
-    //             onClick={handleCreateProjectClick}
-    //             disabled={isCreating}
-    //             className="px-2 py-1 bg-zinc-900 text-white rounded cursor-pointer disabled:opacity-50"
-    //           >
-    //             {isCreating ? "Creating..." : "Create new project"}
-    //           </button>
-    //           {createError ? (
-    //             <span className="text-xs text-red-600">
-    //               {typeof createError === "object" &&
-    //               createError !== null &&
-    //               "data" in createError
-    //                 ? ((createError as { data?: { message?: string } }).data
-    //                     ?.message ?? "Create failed")
-    //                 : "Create failed"}
-    //             </span>
-    //           ) : null}
-    //           {createdProject ? (
-    //             <span className="text-xs text-green-600">Created</span>
-    //           ) : null}
-    //         </div>
-    //       </div>
-    //     )}
-    //     <button onClick={() => handleSignOut()}>ВЫЙТИ</button>
-    //   </main>
-    // </div>
-    <div></div>
+            {authMode === "register" ? (
+              <RegisterForm onRegistered={() => setAuthMode("login")} />
+            ) : (
+              <LoginForm />
+            )}
+          </>
+        ) : (
+          <div>
+            <AgencyProjectsPanel />
+            <div className="mt-4 flex gap-2 items-center">
+              {createError ? (
+                <span className="text-xs text-red-600">
+                  {typeof createError === "object" &&
+                  createError !== null &&
+                  "data" in createError
+                    ? ((createError as { data?: { message?: string } }).data
+                        ?.message ?? "Create failed")
+                    : "Create failed"}
+                </span>
+              ) : null}
+              {createdProject ? (
+                <span className="text-xs text-green-600">Created</span>
+              ) : null}
+            </div>
+          </div>
+        )}
+        <button onClick={() => handleSignOut()}>ВЫЙТИ</button>
+      </main>
+    </div>
   );
 }

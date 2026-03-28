@@ -9,7 +9,7 @@ export const projectApi = baseApi.injectEndpoints({
       queryFn: async (token) => {
         const { data, error } = await supabase
           .from("projects")
-          .select("*, milestones(*)") // Сразу тянем этапы
+          .select("*, milestones(*)")
           .eq("share_token", token)
           .single();
 
@@ -61,6 +61,19 @@ export const projectApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["Project"],
     }),
+    // 4. Удаление проекта
+    deleteProject: build.mutation<null, string>({
+      queryFn: async (projectId) => {
+        const { error } = await supabase
+          .from("projects")
+          .delete()
+          .eq("id", projectId);
+
+        if (error) return { error };
+        return { data: null };
+      },
+      invalidatesTags: ["Project"],
+    }),
   }),
 });
 
@@ -68,4 +81,5 @@ export const {
   useGetProjectByTokenQuery,
   useCreateNewProjectMutation,
   useGetAgencyProjectsQuery,
+  useDeleteProjectMutation,
 } = projectApi;
