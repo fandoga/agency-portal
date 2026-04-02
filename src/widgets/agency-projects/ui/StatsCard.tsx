@@ -24,7 +24,7 @@ const StatsCard = ({ data }: { data: Project[] | undefined }) => {
         className={`${kpdFull ? "bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300" : "bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300"}`}
         variant="secondary"
       >
-        КПД недели: {kpd}%
+        КПД недели: {kpd >= 0 ? kpd : 0}%
       </Badge>
     </div>
   );

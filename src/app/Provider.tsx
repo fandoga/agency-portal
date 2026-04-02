@@ -6,15 +6,12 @@ import {
   PointerSensor,
 } from "@dnd-kit/react";
 import { PointerActivationConstraints } from "@dnd-kit/dom";
-import {
-  projectApi,
-  useDeleteProjectMutation,
-} from "@/src/entities/project/api/projectApi";
+import { projectApi } from "@/src/entities/project/api/projectApi";
 import { AuthProvider } from "../shared/providers/authProvider";
 import { ReduxProvider, store } from "../shared/providers/reduxProvider";
 import { providersType } from "../shared/types/providersType";
 
-const AppShell = ({ children }: providersType) => {
+const Provider = ({ children }: providersType) => {
   return (
     <AuthProvider>
       <ReduxProvider>
@@ -39,7 +36,7 @@ const AppShell = ({ children }: providersType) => {
 
             // Swipe left to -100px (or further) removes project
             //Преместить куда то более локально!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            if (sourceId && deltaX <= -100) {
+            if (sourceId && deltaX <= -80) {
               store.dispatch(
                 projectApi.endpoints.deleteProject.initiate(String(sourceId)),
               );
@@ -53,4 +50,4 @@ const AppShell = ({ children }: providersType) => {
   );
 };
 
-export default AppShell;
+export default Provider;

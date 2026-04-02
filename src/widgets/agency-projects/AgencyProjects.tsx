@@ -1,14 +1,12 @@
 "use client";
 
-import { useGetAgencyProjectsQuery } from "@/src/entities/project/api/projectApi";
 import React, { useEffect } from "react";
 import StatsCard from "./ui/StatsCard";
 import ProjectCard from "./ui/ProjectCard";
 import CreateProjectForm from "@/src/features/projects/create-project/CreateProjectModal";
+import { Project } from "@/src/entities/project/lib/types";
 
-const AgencyProjects = () => {
-  const { data } = useGetAgencyProjectsQuery();
-
+const AgencyProjects = ({ data }: { data: Project[] }) => {
   useEffect(() => {
     console.log(data);
   }, [data]);

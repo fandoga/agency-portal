@@ -41,9 +41,9 @@ export async function proxy(req: NextRequest) {
   }
 
   // Не даем зайти на логин если уже есть сессия
-  if (user && (isAuthPage || defaultPage)) {
-    return NextResponse.redirect(new URL("/agency", req.url));
-  }
+  // if (user && isAuthPage) {
+  //   return NextResponse.redirect(new URL("/agency", req.url));
+  // }
 
   return response;
 }

@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@source "../app/**/*.{js,ts,jsx,tsx,mdx}";
+@source "../src/**/*.{js,ts,jsx,tsx,mdx}";
 @source "../components/**/*.{js,ts,jsx,tsx,mdx}";
 
 @custom-variant dark (&:is(.dark *));
@@ -19,6 +19,7 @@
   --color-brand-300: var(--brand-300);
   --color-brand-200: var(--brand-200);
   --color-brand-100: var(--brand-100);
+  --font-jost: var(--font-jost);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
@@ -154,6 +155,6 @@
   }
 
   .container {
-    @apply px-4;
+    @apply px-4 pt-4;
   }
 }
