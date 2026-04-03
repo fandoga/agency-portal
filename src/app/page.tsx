@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LoginForm, RegisterForm } from "../features/auth/components/LoginForm";
+import { LoginForm, RegisterForm } from "../features/auth/ui/LoginForm";
 import { useAuth } from "../shared/providers/authProvider";
 import { useGetAgencyProjectsQuery } from "../entities/project/api/projectApi";
 import { useCreateNewProjectMutation } from "../entities/project/api/projectApi";

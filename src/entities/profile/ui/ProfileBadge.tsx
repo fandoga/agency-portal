@@ -6,21 +6,29 @@ interface ProfileBadgeType {
   logo: string;
   name: string;
   hasDrodown?: boolean;
+  dropdownRotate?: boolean;
 }
 
 const ProfileBadge: React.FC<ProfileBadgeType> = ({
   logo,
   name,
   hasDrodown = true,
+  dropdownRotate = false,
 }) => {
   return (
     <div className="rounded-full px-4 w-full h-18 border-1 shadow-sm flex items-center justify-between gap-6">
       <Avatar className="" size="lg">
-        {logo.startsWith("http") && <AvatarImage src={logo} alt="@profile" />}
+        {logo && logo.startsWith("http") && (
+          <AvatarImage src={logo} alt="@profile" />
+        )}
         <AvatarFallback>PR</AvatarFallback>
       </Avatar>
       <h2 className="text-xl">{name}</h2>
-      {<ChevronDown className={`pt-1 ${!hasDrodown && "opacity-0"}`} />}
+      {
+        <ChevronDown
+          className={`pt-1 transition-all ${!hasDrodown && "opacity-0"} ${dropdownRotate && "rotate-180"}`}
+        />
+      }
     </div>
   );
 };

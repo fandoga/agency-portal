@@ -11,7 +11,7 @@ export default function AgencyPage() {
 
   const searchParams = useSearchParams();
 
-  const agencyData = data?.filter(
+  const agencyProjects = data?.filter(
     (A) => A.agency_id === searchParams?.get("agency_id"),
   );
 
@@ -19,8 +19,8 @@ export default function AgencyPage() {
     <div className="container">
       {isLoading ? (
         <Loader text="Загружем ваши проекты" />
-      ) : agencyData && agencyData?.length > 0 ? (
-        <AgencyProjects data={agencyData} />
+      ) : agencyProjects && agencyProjects?.length > 0 ? (
+        <AgencyProjects data={agencyProjects} />
       ) : (
         <EmptyProjects />
       )}

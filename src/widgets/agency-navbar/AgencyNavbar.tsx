@@ -9,7 +9,7 @@ import {
 } from "@/src/shared/icons/NavIcons";
 import { useAuth } from "@/src/shared/providers/authProvider";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 const navItems = [
   { id: "home", href: "/agency", Icon: HomeIcon },
@@ -18,32 +18,48 @@ const navItems = [
   { id: "settings", href: "/settings", Icon: SettingsIcon },
 ] as const;
 
-type NavItemId = (typeof navItems)[number]["id"];
+type NavItemId = (typeof navItems)[number]["id"] | "";
 
 const AgencyNavbar = () => {
   const { session } = useAuth();
   const pathname = usePathname();
   const redirectParams = useRedirectParams();
 
-  const [currentPage, setCurrentPage] = useState<NavItemId>("home");
-  const [left, setLeft] = useState(6);
-  const [width, setWidth] = useState(68);
-  const refs = useRef<Record<NavItemId, HTMLDivElement | null>>({
-    home: null,
-    reports: null,
-    clients: null,
-    settings: null,
-  });
+  const [left, setLeft] = useState(0);
+  const [width, setWidth] = useState(0);
+  const [ready, setReady] = useState(false);
+  const refs = useRef<Partial<Record<NavItemId, HTMLDivElement | null>>>({});
   const primaryColor = "#f78da7";
 
-  useEffect(() => {
-    const el = refs.current[currentPage];
+  const currentPage: NavItemId = pathname?.startsWith("/settings")
+    ? "settings"
+    : pathname?.startsWith("/reports")
+      ? "reports"
+      : pathname?.startsWith("/clients")
+        ? "clients"
+        : pathname?.startsWith("/agency")
+          ? "home"
+          : "";
+
+  const updateIndicator = useCallback((id: NavItemId) => {
+    const el = refs.current[id];
     if (el) {
       const { offsetLeft, offsetWidth } = el;
       setLeft(offsetLeft);
       setWidth(offsetWidth);
+      setReady(true);
     }
-  }, [currentPage]);
+  }, []);
+
+  const setRef = useCallback(
+    (id: NavItemId) => (el: HTMLDivElement | null) => {
+      refs.current[id] = el;
+      if (id === currentPage && el) {
+        updateIndicator(id);
+      }
+    },
+    [currentPage, updateIndicator],
+  );
 
   if (session && !pathname?.startsWith("/auth")) {
     return (
@@ -54,11 +70,8 @@ const AgencyNavbar = () => {
               <div
                 key={id}
                 className="z-100 w-17 h-full flex items-center justify-center"
-                ref={(el) => {
-                  refs.current[id] = el;
-                }}
+                ref={setRef(id)}
                 onClick={() => {
-                  setCurrentPage(id);
                   redirectParams(href);
                 }}
               >
@@ -70,6 +83,7 @@ const AgencyNavbar = () => {
             style={{
               transform: `translateX(${left}px)`,
               width: `${width}px`,
+              opacity: ready ? 1 : 0,
             }}
             className="absolute transition top-1 w-15 h-14 rounded-full bg-accent"
           />
