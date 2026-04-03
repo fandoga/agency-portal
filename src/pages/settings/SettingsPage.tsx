@@ -26,7 +26,7 @@ const SettingsPage = () => {
             </div>
           )}
         </CardHeader>
-        <Separator className={`${open ? "mt-80" : "mt-0"} transition-all`} />
+        <Separator className={`${open ? "mt-82" : "mt-0"} transition-all`} />
         <CardContent
           className={`flex h-full flex-col transition-all pt-4 gap-4`}
         >

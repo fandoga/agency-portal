@@ -32,7 +32,7 @@ export async function proxy(req: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
-  const isAuthPage = req.nextUrl.pathname.startsWith("/auth");
+  const isAuthPage = req.nextUrl.pathname === "/auth";
   const defaultPage = req.nextUrl.pathname === "/";
 
   // Перенос на логин если нету сессии
