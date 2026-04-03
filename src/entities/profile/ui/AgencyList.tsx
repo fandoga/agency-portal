@@ -28,7 +28,7 @@ const AgencyList = () => {
           <ProfileBadge
             logo={ag.logo_url}
             name={ag.agency_name}
-            onProfilePage={false}
+            hasDrodown={false}
           />
         </div>
       ))}

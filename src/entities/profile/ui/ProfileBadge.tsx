@@ -5,13 +5,13 @@ import { ChevronDown } from "lucide-react";
 interface ProfileBadgeType {
   logo: string;
   name: string;
-  onProfilePage?: boolean;
+  hasDrodown?: boolean;
 }
 
 const ProfileBadge: React.FC<ProfileBadgeType> = ({
   logo,
   name,
-  onProfilePage = true,
+  hasDrodown = true,
 }) => {
   return (
     <div className="rounded-full px-4 w-full h-18 border-1 shadow-sm flex items-center justify-between gap-6">
@@ -20,7 +20,7 @@ const ProfileBadge: React.FC<ProfileBadgeType> = ({
         <AvatarFallback>PR</AvatarFallback>
       </Avatar>
       <h2 className="text-xl">{name}</h2>
-      {<ChevronDown className={`pt-1 ${!onProfilePage && "opacity-0"}`} />}
+      {<ChevronDown className={`pt-1 ${!hasDrodown && "opacity-0"}`} />}
     </div>
   );
 };

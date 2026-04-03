@@ -18,7 +18,7 @@ export default function AgencyPage() {
   return (
     <div className="container">
       {isLoading ? (
-        <Loader />
+        <Loader text="Загружем ваши проекты" />
       ) : agencyData && agencyData?.length > 0 ? (
         <AgencyProjects data={agencyData} />
       ) : (
