@@ -36,9 +36,9 @@ export async function proxy(req: NextRequest) {
   const defaultPage = req.nextUrl.pathname === "/";
 
   // Перенос на логин если нету сессии
-  if (!user && !isAuthPage) {
-    return NextResponse.redirect(new URL("/auth", req.url));
-  }
+  // if (!user && !isAuthPage) {
+  //   return NextResponse.redirect(new URL("/auth", req.url));
+  // }
 
   // Не даем зайти на логин если уже есть сессия
   // if (user && isAuthPage) {

@@ -3,23 +3,21 @@
 import React from "react";
 import {
   Empty,
-  EmptyContent,
-  EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 
-const Loader = () => {
+const Loader = ({ text = "Заргузка..." }: { text?: string }) => {
   return (
-    <div className="w-full h-full my-[25vh]">
+    <div className="w-full z-1000 h-full my-[25vh]">
       <Empty className="w-full">
         <EmptyHeader>
           <EmptyMedia variant="icon">
             <Spinner />
           </EmptyMedia>
-          <EmptyTitle>Загружаем ваши проекты</EmptyTitle>
+          <EmptyTitle>{text}</EmptyTitle>
         </EmptyHeader>
       </Empty>
     </div>
