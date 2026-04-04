@@ -11,12 +11,18 @@ export const profileApi = baseApi.injectEndpoints({
         website_url,
         logo_url,
       }: CreateProfileInput) => {
+        const { data: userData, error: userErr } =
+          await supabase.auth.getUser();
+        if (userErr) return { error: userErr };
+        if (!userData.user) return { error: { message: "Not authenticated" } };
+
         const id = crypto.randomUUID();
 
         const { data, error } = await supabase
           .from("profiles")
           .insert({
             id,
+            user_id: userData.user.id,
             agency_name,
             website_url: website_url || "",
             logo_url: logo_url || "",

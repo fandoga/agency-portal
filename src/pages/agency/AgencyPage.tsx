@@ -2,7 +2,7 @@
 
 import { useGetAgencyProjectsQuery } from "@/src/entities/project/api/projectApi";
 import EmptyProjects from "@/src/entities/project/ui/EmptyProjects";
-import Loader from "@/src/shared/components/Loader";
+import Loading from "@/src/shared/ui/loading";
 import AgencyProjects from "@/src/widgets/agency-projects/AgencyProjects";
 import { useSearchParams } from "next/navigation";
 
@@ -18,7 +18,7 @@ export default function AgencyPage() {
   return (
     <div className="container">
       {isLoading ? (
-        <Loader text="Загружем ваши проекты" />
+        <Loading text="Загружем ваши проекты" />
       ) : agencyProjects && agencyProjects?.length > 0 ? (
         <AgencyProjects data={agencyProjects} />
       ) : (

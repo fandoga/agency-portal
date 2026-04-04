@@ -4,6 +4,8 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import AgencyNavbar from "../widgets/agency-navbar/AgencyNavbar";
 import Provider from "./Provider";
+import { Suspense } from "react";
+import Loading from "../shared/ui/loading";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -48,7 +50,7 @@ export default function RootLayout({
       <Provider>
         <body className="min-h-full flex flex-col">
           <AgencyNavbar />
-          {children}
+          <Suspense fallback={<Loading />}>{children}</Suspense>
         </body>
       </Provider>
     </html>

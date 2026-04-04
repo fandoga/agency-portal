@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 
-const Loader = ({ text = "Заргузка..." }: { text?: string }) => {
+const Loading = ({ text = "Загрузка..." }: { text?: string }) => {
   return (
     <div className="w-full z-1000 h-full my-[25vh]">
       <Empty className="w-full">
@@ -24,4 +24,4 @@ const Loader = ({ text = "Заргузка..." }: { text?: string }) => {
   );
 };
 
-export default Loader;
+export default Loading;

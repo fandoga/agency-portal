@@ -64,7 +64,7 @@ const AgencyNavbar = () => {
   if (session && !pathname?.startsWith("/auth")) {
     return (
       <div className="fixed bottom-10 flex items-center justify-center w-full">
-        <div className="relative w-80 h-16 rounded-full bg-secondary cursor-pointer">
+        <div className="relative w-80 h-16 rounded-full border-1 bg-secondary cursor-pointer">
           <div className="flex items-center justify-around size-full">
             {navItems.map(({ id, href, Icon }) => (
               <div
@@ -85,7 +85,7 @@ const AgencyNavbar = () => {
               width: `${width}px`,
               opacity: ready ? 1 : 0,
             }}
-            className="absolute transition top-1 w-15 h-14 rounded-full bg-accent"
+            className="absolute transition top-1 h-13.5 rounded-full bg-accent"
           />
         </div>
       </div>

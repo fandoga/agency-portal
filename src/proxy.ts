@@ -34,6 +34,10 @@ export async function proxy(req: NextRequest) {
 
   const isAuthPage = req.nextUrl.pathname === "/auth";
   const defaultPage = req.nextUrl.pathname === "/";
+  const isChooseAgencyPage = req.nextUrl.pathname.startsWith(
+    "/auth/choose-agency",
+  );
+  const selectedAgencyId = req.nextUrl.searchParams.get("agency_id");
 
   // Перенос на логин если нету сессии
   if (!user && !isAuthPage) {
@@ -43,6 +47,10 @@ export async function proxy(req: NextRequest) {
   // Не даем зайти на логин если уже есть сессия
   if (user && isAuthPage) {
     return NextResponse.redirect(new URL("/agency", req.url));
+  }
+
+  if (!selectedAgencyId && !isChooseAgencyPage && user) {
+    return NextResponse.redirect(new URL("/auth/choose-agency", req.url));
   }
 
   return response;

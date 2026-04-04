@@ -1,17 +1,31 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import ProfileBadge from "@/src/entities/profile/ui/ProfileBadge";
-import { useAppSelector } from "@/src/shared/hooks/redux";
+import { supabase } from "@/src/shared/api/supabase/client";
+import { useGetAgencyData } from "@/src/shared/hooks/api";
+import { redirect } from "next/navigation";
 import React, { useState } from "react";
 
 const SettingsProfileBadge = ({}) => {
   const [open, setOpen] = useState(false);
-  const otherAgency = useAppSelector((state) => state.profile.otherAgency);
-  const session = useAppSelector((state) => state.profile.session);
+  const { session, otherAgency } = useGetAgencyData();
+
+  const handleLogOut = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      alert("Ошибка при выходе из профиля: " + error.message);
+    } else {
+      // спецциально используем обычный redirect, нам не нужно сохранять searchParams
+      redirect("/auth");
+    }
+  };
 
   return (
-    <div className="relative" onClick={() => setOpen((prev) => !prev)}>
+    <div className="relative">
       <ProfileBadge
+        onClick={() => setOpen((prev) => !prev)}
         logo={session?.logo_url || ""}
         name={session?.agency_name || ""}
         dropdownRotate={open}
@@ -39,7 +53,12 @@ const SettingsProfileBadge = ({}) => {
               <Button variant="outline" size={"sm"}>
                 Добавить команду
               </Button>
-              <Button className="flex-1" variant="destructive" size={"sm"}>
+              <Button
+                onClick={(e) => handleLogOut(e)}
+                className="flex-1"
+                variant="destructive"
+                size={"sm"}
+              >
                 Выйти
               </Button>
             </div>
