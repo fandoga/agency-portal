@@ -17,7 +17,12 @@ export function AppDragDropProvider({ children }: providersType) {
         PointerSensor.configure({
           activationConstraints: (event) => {
             if (event.pointerType === "touch") {
-              return [new PointerActivationConstraints.Distance({ value: 0 })];
+              return [
+                new PointerActivationConstraints.Delay({
+                  value: 0,
+                  tolerance: 999,
+                }),
+              ];
             }
 
             return undefined;

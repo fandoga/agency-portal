@@ -66,17 +66,16 @@ const ProjectCard = ({ project }: { project: Project }) => {
   const [rndmValue] = useState(() => Math.random() * (100 - 0));
 
   return (
-    <div ref={ref} className="relative w-full">
+    <div
+      ref={ref}
+      className="relative w-full touch-none select-none overscroll-contain"
+      style={{ touchAction: "none", WebkitTouchCallout: "none" }}
+    >
       <Item className="py-3" variant={"outline"}>
         <ItemContent>
           <div className="flex justify-between items-center pb-2">
             <ItemTitle className="text-lg">
-              <span
-                className="inline-flex touch-none select-none"
-                style={{ touchAction: "none" }}
-              >
-                {project.name}
-              </span>
+              <span className="inline-flex">{project.name}</span>
             </ItemTitle>
             <Badge className={badgeClassName}>{statusLabel}</Badge>
           </div>
