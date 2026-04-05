@@ -47,12 +47,14 @@ export default function RootLayout({
         inter.variable,
       )}
     >
-      <Provider>
-        <body className="min-h-full flex flex-col">
-          <AgencyNavbar />
+      <body className="min-h-full flex flex-col">
+        <Provider>
+          <Suspense fallback={null}>
+            <AgencyNavbar />
+          </Suspense>
           <Suspense fallback={<Loading />}>{children}</Suspense>
-        </body>
-      </Provider>
+        </Provider>
+      </body>
     </html>
   );
 }

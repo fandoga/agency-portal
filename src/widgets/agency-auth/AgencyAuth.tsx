@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,7 +19,6 @@ const AgencyAuth = () => {
   const [submit, setSubmit] = useState<boolean>(false);
 
   const { session } = useAuth();
-  console.log(session);
 
   return (
     <div className="w-full mb-20">
