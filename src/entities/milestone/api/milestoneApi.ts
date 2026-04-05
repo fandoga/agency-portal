@@ -1,6 +1,5 @@
 import { supabase } from "@/src/shared/api/supabase/client";
 import { baseApi } from "@/src/shared/api/baseApi";
-import type { RootState } from "@/src/store/store";
 import {
   CreateMilestoneInput,
   DeleteMilestoneArg,
