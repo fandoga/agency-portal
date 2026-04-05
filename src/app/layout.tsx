@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { connection } from "next/server";
 import { Geist, Geist_Mono, Inter, Jost } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -30,16 +29,11 @@ export const metadata: Metadata = {
   description: "testdescription - agency portal",
 };
 
-/** Redux/RTK на клиенте ломает статический prerender; `connection()` гарантирует динамический рендер на Vercel. */
-export const dynamic = "force-dynamic";
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  await connection();
-
   return (
     <html
       lang="en"
