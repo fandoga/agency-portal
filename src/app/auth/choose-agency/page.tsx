@@ -1,4 +1,4 @@
-import ChooseAgencyPage from "@/src/pages/choose-agency/ChooseAgencyPage";
+import ChooseAgencyPage from "@/src/page/choose-agency/ChooseAgencyPage";
 
 export default function ChooseAgency() {
   return <ChooseAgencyPage />;
