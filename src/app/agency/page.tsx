@@ -1,9 +1,7 @@
-import { connection } from "next/server";
-import AgencyPageLoader from "./AgencyPageLoader";
+import AgencyPage from "@/src/page/agency/AgencyPage";
 
 export const dynamic = "force-dynamic";
 
-export default async function AgencyRoute() {
-  await connection();
-  return <AgencyPageLoader />;
+export default function AgencyRoute() {
+  return <AgencyPage />;
 }
