@@ -17,7 +17,7 @@ export function AppDragDropProvider({ children }: providersType) {
         PointerSensor.configure({
           activationConstraints: (event) => {
             if (event.pointerType === "touch") {
-              return [new PointerActivationConstraints.Distance({ value: 4 })];
+              return [new PointerActivationConstraints.Distance({ value: 0 })];
             }
 
             return undefined;
@@ -29,7 +29,7 @@ export function AppDragDropProvider({ children }: providersType) {
         const sourceId = operation?.source?.id;
         const deltaX = operation?.transform?.x ?? 0;
 
-        if (sourceId && deltaX <= -79) {
+        if (sourceId && deltaX <= -90) {
           dispatch(
             projectApi.endpoints.deleteProject.initiate(String(sourceId)),
           );

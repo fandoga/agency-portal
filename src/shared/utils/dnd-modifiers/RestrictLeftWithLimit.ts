@@ -3,7 +3,7 @@ import type { Coordinates } from "@dnd-kit/geometry";
 
 export class RestrictLeftWithLimit extends Modifier {
   apply({ transform }: { transform: Coordinates }) {
-    const maxOffset = -80; // максимум влево (отрицательное значение)
+    const maxOffset = -90; // максимум влево (отрицательное значение)
     return {
       x: Math.max(transform.x, maxOffset),
       y: 0,
