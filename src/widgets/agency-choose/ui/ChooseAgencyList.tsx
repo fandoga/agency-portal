@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { redirect, useSearchParams } from "next/navigation";
 import ProfileBadge from "../../../entities/profile/ui/ProfileBadge";

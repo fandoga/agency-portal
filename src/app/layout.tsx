@@ -29,6 +29,9 @@ export const metadata: Metadata = {
   description: "testdescription - agency portal",
 };
 
+/** Статический prerender + Redux на Vercel иногда даёт пустой React-Redux context. */
+export const dynamic = "force-dynamic";
+
 export default function RootLayout({
   children,
 }: Readonly<{
