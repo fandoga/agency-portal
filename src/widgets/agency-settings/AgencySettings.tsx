@@ -6,12 +6,15 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Profile } from "@/src/entities/profile/lib/types";
 import SettingsProfileBadge from "./ui/SettingsProfileBadge";
+import { useRedirectParams } from "@/src/shared/hooks/useRedirectParams";
 
 interface AgencySettingsType {
   session: Profile;
 }
 
 const AgencySettings: React.FC<AgencySettingsType> = ({ session }) => {
+  const redirectParams = useRedirectParams();
+
   return (
     <div className="size-full">
       <Card className="h-full" size="sm">
@@ -20,12 +23,20 @@ const AgencySettings: React.FC<AgencySettingsType> = ({ session }) => {
         <CardContent
           className={`flex h-full flex-col transition-all pt-4 gap-4`}
         >
-          <Button size={"sm"} variant={"default"}>
+          <Button
+            onClick={() => redirectParams("/settings/agency-settings")}
+            size={"sm"}
+          >
             Настройки команды
           </Button>
-          <Button size={"sm"} variant={"outline"}>
-            Приложение
+          <Button
+            onClick={() => redirectParams("/settings/agency-settings")}
+            size={"sm"}
+            variant="outline"
+          >
+            Настройки организации
           </Button>
+          <Button size={"sm"}>Приложение</Button>
           <Button size={"sm"} variant={"outline"}>
             Другое
           </Button>
