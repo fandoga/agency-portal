@@ -1,5 +1,3 @@
-"use client";
-
 import { useGetAgencyQuery } from "@/src/entities/profile/api/profileApi";
 import type { Profile } from "@/src/entities/profile/lib/types";
 import { useSearchParams } from "next/navigation";
