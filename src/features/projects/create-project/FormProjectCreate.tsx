@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import type { ProjectStatus } from "@/src/entities/project/lib/types";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCreateNewProjectMutation } from "@/src/entities/project/api/projectApi";
+import { useGetAgencyData } from "@/src/shared/hooks/api";
 
 export type ProjectEntityFormValues = {
   name: string;
@@ -34,6 +35,7 @@ const FormProjectCreate = ({
   const [name, setName] = useState("");
   const [status, setStatus] = useState<ProjectStatus>("in_progress");
   const [description, setDescription] = useState("");
+  const { selectedAgencyId } = useGetAgencyData();
 
   const [nameError, setNameError] = useState("");
 
@@ -43,8 +45,12 @@ const FormProjectCreate = ({
       const msg = (error as { message?: unknown }).message;
       if (typeof msg === "string" && msg) return msg;
     }
+
+    if (!selectedAgencyId) {
+      return "Не удалось получить данные о сессии. Попробуйте еще раз.";
+    }
     return "Не удалось создать проект. Попробуйте еще раз.";
-  }, [error]);
+  }, [error, selectedAgencyId]);
 
   const canSubmit = !isLoading;
 
@@ -58,9 +64,11 @@ const FormProjectCreate = ({
     }
 
     if (!canSubmit) return;
+    if (!selectedAgencyId) return;
 
     try {
       await createNewProject({
+        agency_id: selectedAgencyId,
         name: trimmed,
         description: description.trim() ? description.trim() : null,
         status,

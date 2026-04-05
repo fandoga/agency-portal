@@ -17,5 +17,5 @@ export const useGetAgencyData = () => {
   const session = data.find((agency) => agency.id === selectedAgencyId) ?? null;
   const otherAgency = data.filter((agency) => agency.id !== selectedAgencyId);
 
-  return { agencies: data, session, otherAgency, isLoading };
+  return { agencies: data, session, otherAgency, isLoading, selectedAgencyId };
 };

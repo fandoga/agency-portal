@@ -18,6 +18,7 @@ export interface Project {
 }
 
 export interface createProjectType {
+  agency_id: string;
   name: string;
   description?: string | null;
   status?: ProjectStatus | null;

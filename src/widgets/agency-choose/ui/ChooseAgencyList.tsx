@@ -1,7 +1,7 @@
 import React from "react";
 import { redirect, useSearchParams } from "next/navigation";
-import ProfileBadge from "./ProfileBadge";
-import { Profile } from "../lib/types";
+import ProfileBadge from "../../../entities/profile/ui/ProfileBadge";
+import { Profile } from "../../../entities/profile/lib/types";
 import { useGetAgencyData } from "@/src/shared/hooks/api";
 
 const ChooseAgencyList = () => {

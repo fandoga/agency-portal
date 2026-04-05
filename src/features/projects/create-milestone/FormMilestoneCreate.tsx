@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import type { MilestoneStatus } from "@/src/entities/milestone/lib/types";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCreateNewMilestoneMutation } from "@/src/entities/milestone/api/milestoneApi";
+import { useGetAgencyData } from "@/src/shared/hooks/api";
 
 export type MilestoneFormValues = {
   title: string;
@@ -47,6 +48,7 @@ const FormMilestoneCreate = ({
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState<MilestoneStatus>("todo");
   const [description, setDescription] = useState("");
+  const { selectedAgencyId } = useGetAgencyData();
 
   const [titleError, setTitleError] = useState("");
 
@@ -72,8 +74,11 @@ const FormMilestoneCreate = ({
 
     if (!canSubmit) return;
 
+    if (!selectedAgencyId) return;
+
     try {
       await createMilestone({
+        agency_id: selectedAgencyId,
         project_id: projectId,
         name: trimmed,
         description: description.trim() ? description.trim() : null,

@@ -35,7 +35,12 @@ export const projectApi = baseApi.injectEndpoints({
     }),
     // 3. Создания нового проекта
     createNewProject: build.mutation<Project, createProjectType>({
-      queryFn: async ({ name, description, status }: createProjectType) => {
+      queryFn: async ({
+        agency_id,
+        name,
+        description,
+        status,
+      }: createProjectType) => {
         const { data: userData, error: userErr } =
           await supabase.auth.getUser();
         if (userErr) return { error: userErr };
@@ -48,7 +53,7 @@ export const projectApi = baseApi.injectEndpoints({
           .from("projects")
           .insert({
             id,
-            agency_id: userData.user.id,
+            agency_id,
             name,
             description,
             status,

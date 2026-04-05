@@ -49,6 +49,7 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL("/agency", req.url));
   }
 
+  // Перенос на выбор команды если в url нет agency_id
   if (!selectedAgencyId && !isChooseAgencyPage && user) {
     return NextResponse.redirect(new URL("/auth/choose-agency", req.url));
   }

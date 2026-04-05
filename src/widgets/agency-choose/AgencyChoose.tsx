@@ -9,7 +9,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import ChooseAgencyList from "./ChooseAgencyList";
+import ChooseAgencyList from "./ui/ChooseAgencyList";
+import CreateAgencyModal from "@/src/features/agencies/create-agency/CreateAgencyModal";
 
 const ChooseAgencyCard = () => {
   return (
@@ -29,7 +30,7 @@ const ChooseAgencyCard = () => {
         </CardContent>
         <Separator />
         <CardFooter>
-          <Button className="w-full rounded-full">Создать новую команду</Button>
+          <CreateAgencyModal text="Создайте новую команду" />
         </CardFooter>
       </Card>
     </div>

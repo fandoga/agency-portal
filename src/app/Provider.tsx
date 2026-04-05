@@ -34,9 +34,8 @@ const Provider = ({ children }: providersType) => {
             const sourceId = operation?.source?.id;
             const deltaX = operation?.transform?.x ?? 0;
 
-            // Swipe left to -100px (or further) removes project
             //Преместить куда то более локально!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            if (sourceId && deltaX <= -80) {
+            if (sourceId && deltaX <= -79) {
               store.dispatch(
                 projectApi.endpoints.deleteProject.initiate(String(sourceId)),
               );

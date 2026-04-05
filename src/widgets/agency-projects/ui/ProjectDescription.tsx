@@ -7,10 +7,13 @@ import CreateMilestoneModal from "@/src/features/projects/create-milestone/Creat
 import { useDeleteMilestoneMutation } from "@/src/entities/milestone/api/milestoneApi";
 import { Trash2 } from "lucide-react";
 import React from "react";
+import { useGetAgencyData } from "@/src/shared/hooks/api";
 
 const ProjectDescription = ({ project }: { project: Project }) => {
   const [deleteMilestone, { isLoading: isDeleting }] =
     useDeleteMilestoneMutation();
+
+  const { selectedAgencyId } = useGetAgencyData();
 
   const milestoneBallColorByStatus: Record<string, string> = {
     todo: "bg-gray-400",
@@ -60,7 +63,9 @@ const ProjectDescription = ({ project }: { project: Project }) => {
                     disabled={isDeleting}
                     aria-label="Удалить задачу"
                     onClick={() => {
+                      if (!selectedAgencyId) return;
                       void deleteMilestone({
+                        agency_id: selectedAgencyId,
                         milestoneId: mile.id,
                         projectId: project.id,
                       }).unwrap();

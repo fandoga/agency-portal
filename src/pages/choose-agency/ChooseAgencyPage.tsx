@@ -1,7 +1,7 @@
 "use client";
 
-import ChooseAgencyCard from "@/src/entities/profile/ui/ChooseAgencyCard";
-import ChooseAgencyEmpty from "@/src/entities/profile/ui/ChooseAgencyEmpty";
+import ChooseAgencyCard from "@/src/widgets/agency-choose/AgencyChoose";
+import ChooseAgencyEmpty from "@/src/widgets/agency-choose/ui/ChooseAgencyEmpty";
 import { useGetAgencyData } from "@/src/shared/hooks/api";
 import Loading from "@/src/shared/ui/loading";
 

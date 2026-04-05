@@ -1,5 +1,6 @@
 import { supabase } from "@/src/shared/api/supabase/client";
 import { baseApi } from "@/src/shared/api/baseApi";
+import type { RootState } from "@/src/store/store";
 import {
   CreateMilestoneInput,
   DeleteMilestoneArg,
@@ -11,6 +12,7 @@ export const milestoneApi = baseApi.injectEndpoints({
     // 1. создание задачи
     createNewMilestone: build.mutation<Milestone, CreateMilestoneInput>({
       queryFn: async ({
+        agency_id,
         project_id,
         name,
         description,
@@ -26,7 +28,7 @@ export const milestoneApi = baseApi.injectEndpoints({
           .from("projects")
           .select("id")
           .eq("id", project_id)
-          .eq("agency_id", userData.user.id)
+          .eq("agency_id", agency_id)
           .single();
 
         if (pErr || !project) {
@@ -57,7 +59,7 @@ export const milestoneApi = baseApi.injectEndpoints({
     }),
     // 2. Удаление задачи
     deleteMilestone: build.mutation<null, DeleteMilestoneArg>({
-      queryFn: async ({ milestoneId, projectId }) => {
+      queryFn: async ({ milestoneId, projectId, agency_id }) => {
         const { data: userData, error: userErr } =
           await supabase.auth.getUser();
         if (userErr) return { error: userErr };
@@ -67,7 +69,7 @@ export const milestoneApi = baseApi.injectEndpoints({
           .from("projects")
           .select("id")
           .eq("id", projectId)
-          .eq("agency_id", userData.user.id)
+          .eq("agency_id", agency_id)
           .single();
 
         if (pErr || !project) {

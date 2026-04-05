@@ -9,24 +9,38 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import FormProjectCreate from "./FormProjectCreate";
+import FormProjectCreate from "./FormAgencyCreate";
 
-const CreateProjectModal = ({ text }: { text?: string }) => {
+interface CreateAgencyModalType {
+  text: string;
+  variant?:
+    | "link"
+    | "default"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "destructive"
+    | null
+    | undefined;
+}
+
+const CreateAgencyModal: React.FC<CreateAgencyModalType> = ({
+  text = "Добавить команду",
+  variant,
+}) => {
   const [open, setOpen] = React.useState(false);
   const initialFocusRef = React.useRef<HTMLInputElement | null>(null);
 
   return (
-    <div>
+    <div className="w-full">
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogTrigger asChild>
-          {text && text.length > 0 ? (
-            <Button>{text}</Button>
-          ) : (
-            <Button size={"icon-lg"} className="rounded-full mt-2">
-              <Plus className="size-6 cursor-pointer" />
-            </Button>
-          )}
+          <Button
+            variant={variant || "default"}
+            className="rounded-full w-full"
+          >
+            {text}
+          </Button>
         </AlertDialogTrigger>
         <AlertDialogContent
           onOpenAutoFocus={(e) => {
@@ -34,9 +48,10 @@ const CreateProjectModal = ({ text }: { text?: string }) => {
             queueMicrotask(() => initialFocusRef.current?.focus());
           }}
         >
-          <AlertDialogTitle>Создайте новый проект</AlertDialogTitle>
+          <AlertDialogTitle>Создайте новую команду</AlertDialogTitle>
           <AlertDialogDescription className="sr-only">
-            Создание нового проекта с указанным статусом, описанием и названием
+            Создание новой команды с указанным названием и ссылками на веб-сайт
+            и логотип
           </AlertDialogDescription>
           <FormProjectCreate
             key={open ? "project-form-open" : "project-form-closed"}
@@ -49,4 +64,4 @@ const CreateProjectModal = ({ text }: { text?: string }) => {
   );
 };
 
-export default CreateProjectModal;
+export default CreateAgencyModal;

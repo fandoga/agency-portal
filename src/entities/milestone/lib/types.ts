@@ -11,6 +11,7 @@ export interface Milestone {
 }
 
 export type CreateMilestoneInput = {
+  agency_id: string;
   project_id: string;
   name: string;
   description?: string | null;
@@ -19,6 +20,7 @@ export type CreateMilestoneInput = {
 };
 
 export type DeleteMilestoneArg = {
+  agency_id: string;
   milestoneId: string;
   projectId: string;
 };

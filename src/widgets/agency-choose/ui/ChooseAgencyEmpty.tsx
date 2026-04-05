@@ -7,13 +7,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import CreateAgencyModal from "@/src/features/agencies/create-agency/CreateAgencyModal";
+import { useAuth } from "@/src/shared/providers/authProvider";
 import React from "react";
-import { useCreateNewProfileMutation } from "../api/profileApi";
-import { Spinner } from "@/components/ui/spinner";
 
 const ChooseAgencyEmpty = () => {
-  const [createNewProfile, isLoading] = useCreateNewProfileMutation();
+  const { session } = useAuth();
 
+  console.log(session);
   return (
     <div className="max-w-90 mx-auto h-full flex flex-col pb-20 gap-4 items-center justify-center">
       <Card className="w-full" size="sm">
@@ -25,19 +26,7 @@ const ChooseAgencyEmpty = () => {
         </CardHeader>
         <Separator />
         <CardFooter className="flex flex-col gap-2">
-          <Button
-            onClick={() => {
-              void createNewProfile({
-                agency_name: "test",
-                website_url: "",
-                logo_url: "",
-              }).unwrap();
-            }}
-            className="w-full rounded-full"
-          >
-            {!isLoading && <Spinner />}
-            Создать команду
-          </Button>
+          <CreateAgencyModal text="Создать команду" />
           <Button variant={"outline"} className="w-full rounded-full">
             Вступить
           </Button>

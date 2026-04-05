@@ -6,7 +6,7 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { Button } from "@/components/ui/button";
+import CreateProjectModal from "@/src/features/projects/create-project/CreateProjectModal";
 
 const EmptyProjects = () => {
   return (
@@ -18,7 +18,7 @@ const EmptyProjects = () => {
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button>Создать первый</Button>
+        <CreateProjectModal text="Создать первый" />
       </EmptyContent>
     </Empty>
   );
