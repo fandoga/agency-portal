@@ -1,10 +1,10 @@
 import { supabase } from "@/src/shared/api/supabase/client"; // Твой конфиг супабейза
 import { baseApi } from "@/src/shared/api/baseApi";
-import { Member } from "../lib/types";
+import { createMemberInviteType, Member } from "../lib/types";
 
 export const membersApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    // 2. Список проектов для админки
+    // 1. Список участников команды
     getAgencyMembers: build.query<Member[], { agency_id: string }>({
       queryFn: async ({ agency_id }) => {
         const { data, error } = await supabase.rpc(
@@ -16,7 +16,32 @@ export const membersApi = baseApi.injectEndpoints({
       },
       providesTags: ["Members"],
     }),
+    createNewInvite: build.mutation<Member, createMemberInviteType>({
+      queryFn: async ({ agency_id, role, token }: createMemberInviteType) => {
+        const { data: userData, error: userErr } =
+          await supabase.auth.getUser();
+        if (userErr) return { error: userErr };
+        if (!userData.user) return { error: { message: "Not authenticated" } };
+
+        const id = crypto.randomUUID();
+
+        const { data, error } = await supabase
+          .from("invites")
+          .insert({
+            id,
+            agency_id,
+            role,
+            token,
+          })
+          .single();
+
+        if (error) return { error };
+        return { data };
+      },
+      invalidatesTags: ["Members"],
+    }),
   }),
 });
 
-export const { useGetAgencyMembersQuery } = membersApi;
+export const { useGetAgencyMembersQuery, useCreateNewInviteMutation } =
+  membersApi;

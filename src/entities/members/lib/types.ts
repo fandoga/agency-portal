@@ -5,3 +5,9 @@ export interface Member {
   role: Role;
   email: string;
 }
+
+export interface createMemberInviteType {
+  agency_id: string;
+  role: Role;
+  token: string | null;
+}

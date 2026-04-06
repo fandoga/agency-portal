@@ -16,7 +16,7 @@ const AgencySettings: React.FC<AgencySettingsType> = ({ session }) => {
   const redirectParams = useRedirectParams();
 
   return (
-    <div className="size-full">
+    <div className="w-full">
       <Card className="h-full" size="sm">
         <CardHeader>{session && <SettingsProfileBadge />}</CardHeader>
         <Separator className={` transition-all`} />

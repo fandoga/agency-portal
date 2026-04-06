@@ -1,43 +1,48 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import type { ProjectStatus } from "@/src/entities/project/lib/types";
-import { useCreateNewProjectMutation } from "@/src/entities/project/api/projectApi";
 import { useGetAgencyData } from "@/src/shared/hooks/api";
 import { Role } from "@/src/entities/members/lib/types";
+import { useCreateNewInviteMutation } from "@/src/entities/members/api/membersApi";
+import { Item } from "@/components/ui/item";
+import { QueryStatus } from "@reduxjs/toolkit/query";
+import OwnerInviteModal from "./OwnerInviteModal";
 
-export type ProjectEntityFormValues = {
-  name: string;
-  description: string | null;
-  status: ProjectStatus;
+type PendingPayload = {
+  agency_id: string;
+  role: Role;
 };
 
 type FormAgencyInviteProps = {
   onRequestClose?: () => void;
-  initialFocusRef?: React.RefObject<HTMLInputElement | null>;
+  initialFocusRef?: React.RefObject<HTMLButtonElement | null>;
 };
 
 const FormAgencyInvite = ({
   onRequestClose,
   initialFocusRef,
 }: FormAgencyInviteProps) => {
-  const [createNewProject, { isLoading, error }] =
-    useCreateNewProjectMutation();
+  const [createNewInvite, { isLoading, error, status }] =
+    useCreateNewInviteMutation();
+
+  const [token, setToken] = useState<string>();
+  const [pendingPayload, setPendingPayload] = useState<PendingPayload | null>(
+    null,
+  );
 
   const [role, setRole] = useState<Role>("member");
-
-  console.log(role);
+  const baseInviteURL = "http://localhost:3000/invite/";
+  const inviteUrl = token ? baseInviteURL + token : "";
 
   const { selectedAgencyId } = useGetAgencyData();
 
@@ -54,18 +59,84 @@ const FormAgencyInvite = ({
     return "Не удалось создать проект. Попробуйте еще раз.";
   }, [error, selectedAgencyId]);
 
-  const canSubmit = !isLoading;
+  const [isCopied, setIsCopied] = useState(false);
+  const isSuccess = status === QueryStatus.fulfilled;
+  const isError = status === QueryStatus.rejected;
+  const cantSubmit = isLoading || isCopied;
 
-  const handleCreate = () => {};
+  const submitInviteRequest = () => {
+    if (cantSubmit) return;
+    if (!selectedAgencyId) return;
+
+    const newToken = crypto.randomUUID();
+    setPendingPayload({
+      agency_id: selectedAgencyId,
+      role,
+    });
+    setToken(newToken);
+  };
+
+  const copyInviteUrl = async () => {
+    if (!inviteUrl) return;
+    try {
+      await navigator.clipboard.writeText(inviteUrl);
+      setIsCopied(true);
+    } catch {
+      // noop
+    }
+  };
+
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    if (role === "owner") return;
+    if (isSuccess) {
+      await copyInviteUrl();
+      return;
+    }
+    submitInviteRequest();
+  };
+
+  const handlePrimaryAction = async () => {
+    if (isSuccess) {
+      await copyInviteUrl();
+      return;
+    }
+    submitInviteRequest();
+  };
+
+  useEffect(() => {
+    if (!token) return;
+    if (!pendingPayload) return;
+    let cancelled = false;
+    const run = async () => {
+      try {
+        await createNewInvite({
+          ...pendingPayload,
+          token,
+        }).unwrap();
+      } catch {
+        //e
+      } finally {
+        if (cancelled) return;
+
+        setPendingPayload(null);
+      }
+    };
+    run();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [token, pendingPayload, createNewInvite]);
 
   return (
     <div>
-      <form onSubmit={handleCreate} className="w-full">
+      <form onSubmit={handleSubmit} className="w-full">
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="role">Роль</FieldLabel>
             <Select onValueChange={(e: Role) => setRole(e)}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger ref={initialFocusRef} className="w-full">
                 <SelectValue placeholder="Выберите роль участника" />
               </SelectTrigger>
               <SelectContent position="popper">
@@ -77,14 +148,40 @@ const FormAgencyInvite = ({
               </SelectContent>
             </Select>
           </Field>
+          {token && token.length > 0 && !apiErrorMessage && (
+            <Item className="border-border">
+              <p className="text-muted-foreground">
+                {(baseInviteURL + token).slice(0, 35) + "..."}
+              </p>
+            </Item>
+          )}
           {apiErrorMessage && (
             <div className="text-sm text-destructive">{apiErrorMessage}</div>
           )}
 
           <Field orientation="horizontal" className="justify-end">
-            <Button type="submit" disabled={!canSubmit}>
-              {isLoading ? "Создание..." : "Сгенерировать"}
-            </Button>
+            {role === "owner" && !isSuccess ? (
+              <OwnerInviteModal
+                onConfirm={handlePrimaryAction}
+                disabled={cantSubmit}
+              />
+            ) : (
+              <Button
+                onClick={handlePrimaryAction}
+                type="submit"
+                disabled={cantSubmit}
+              >
+                {isLoading
+                  ? "Создание..."
+                  : isSuccess
+                    ? isCopied
+                      ? "Скопировано"
+                      : "Скопировать"
+                    : isError
+                      ? "Повторить"
+                      : "Сгенерировать"}
+              </Button>
+            )}
             <Button
               variant="outline"
               type="button"

@@ -12,7 +12,7 @@ import { UserPlus } from "lucide-react";
 
 const AgencyInviteModal = () => {
   const [open, setOpen] = useState(false);
-  const initialFocusRef = React.useRef<HTMLInputElement | null>(null);
+  const initialFocusRef = React.useRef<HTMLButtonElement | null>(null);
 
   return (
     <div>
