@@ -31,6 +31,9 @@ const AgencyNavbar = () => {
   const refs = useRef<Partial<Record<NavItemId, HTMLDivElement | null>>>({});
   const primaryColor = "#f78da7";
 
+  const isShowing =
+    pathname?.startsWith("/agency") || pathname?.startsWith("/settings");
+
   const currentPage: NavItemId = pathname?.startsWith("/settings")
     ? "settings"
     : pathname?.startsWith("/reports")
@@ -61,7 +64,7 @@ const AgencyNavbar = () => {
     [currentPage, updateIndicator],
   );
 
-  if (session && !pathname?.startsWith("/auth")) {
+  if (session && isShowing) {
     return (
       <div className="fixed bottom-0 z-50 flex items-center bg-linear-to-t from-background via-background to-transparent pt-3 pb-10 justify-center w-full">
         <div className="relative w-80 h-16 rounded-full border-1 bg-secondary cursor-pointer">

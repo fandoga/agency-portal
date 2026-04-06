@@ -24,15 +24,14 @@ import AgencyInviteModal from "@/src/features/agency-invite/ui/AgencyInviteModal
 import { useGetAgencyMembersQuery } from "@/src/entities/members/api/membersApi";
 import { useGetAgencyData } from "@/src/shared/hooks/api";
 import { Spinner } from "@/components/ui/spinner";
+import { Button } from "@/components/ui/button";
+import { useRedirectParams } from "@/src/shared/hooks/useRedirectParams";
 
 const AgencyPeopleSettingsPage = () => {
   const { selectedAgencyId, isLoading: isIdLoading } = useGetAgencyData();
+  const refirectParams = useRedirectParams();
 
-  const {
-    data,
-    isLoading: isDataLoading,
-    error,
-  } = useGetAgencyMembersQuery(
+  const { data, isLoading: isDataLoading } = useGetAgencyMembersQuery(
     selectedAgencyId ? { agency_id: selectedAgencyId } : skipToken,
   );
 
@@ -45,7 +44,7 @@ const AgencyPeopleSettingsPage = () => {
   const isLoading = isIdLoading || isDataLoading;
 
   return (
-    <div className="container max-w-2xl py-6">
+    <div className="container max-w-2xl">
       <Card size="sm">
         <CardHeader className="border-b pb-4">
           <CardTitle className="!text-xl">Настройки команды</CardTitle>
@@ -94,6 +93,16 @@ const AgencyPeopleSettingsPage = () => {
         )}
         <CardFooter className="flex-col items-stretch border-t pt-4">
           <AgencyInviteModal />
+          <Button
+            size="sm"
+            className="w-full mt-2"
+            variant={"outline"}
+            onClick={() => {
+              refirectParams("setttings/agency-settings/invites");
+            }}
+          >
+            Отправленные приглашения
+          </Button>
         </CardFooter>
       </Card>
     </div>

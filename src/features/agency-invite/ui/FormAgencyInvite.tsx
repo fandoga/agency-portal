@@ -40,7 +40,7 @@ const FormAgencyInvite = ({
     null,
   );
 
-  const [role, setRole] = useState<Role>("member");
+  const [role, setRole] = useState<Role>();
   const baseInviteURL = "http://localhost:3000/invite/";
   const inviteUrl = token ? baseInviteURL + token : "";
 
@@ -58,6 +58,7 @@ const FormAgencyInvite = ({
     }
     return "Не удалось создать проект. Попробуйте еще раз.";
   }, [error, selectedAgencyId]);
+  const [inputError, setInputError] = useState("");
 
   const [isCopied, setIsCopied] = useState(false);
   const isSuccess = status === QueryStatus.fulfilled;
@@ -67,7 +68,12 @@ const FormAgencyInvite = ({
   const submitInviteRequest = () => {
     if (cantSubmit) return;
     if (!selectedAgencyId) return;
+    if (!role) {
+      setInputError("Не выбрана роль");
+      return;
+    }
 
+    setInputError("");
     const newToken = crypto.randomUUID();
     setPendingPayload({
       agency_id: selectedAgencyId,
@@ -155,9 +161,12 @@ const FormAgencyInvite = ({
               </p>
             </Item>
           )}
-          {apiErrorMessage && (
-            <div className="text-sm text-destructive">{apiErrorMessage}</div>
-          )}
+          {apiErrorMessage ||
+            (inputError.length > 0 && (
+              <div className="text-sm text-destructive">
+                {apiErrorMessage || inputError}
+              </div>
+            ))}
 
           <Field orientation="horizontal" className="justify-end">
             {role === "owner" && !isSuccess ? (

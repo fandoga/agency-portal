@@ -33,6 +33,7 @@ export async function proxy(req: NextRequest) {
   const user = data?.claims;
 
   const isAuthPage = req.nextUrl.pathname === "/auth";
+  const isInvitePage = req.nextUrl.pathname.startsWith("/invite");
   const defaultPage = req.nextUrl.pathname === "/";
   const isChooseAgencyPage = req.nextUrl.pathname.startsWith(
     "/auth/choose-agency",
@@ -50,7 +51,7 @@ export async function proxy(req: NextRequest) {
   }
 
   // Перенос на выбор команды если в url нет agency_id
-  if (!selectedAgencyId && !isChooseAgencyPage && user) {
+  if (!selectedAgencyId && !isChooseAgencyPage && user && !isInvitePage) {
     return NextResponse.redirect(new URL("/auth/choose-agency", req.url));
   }
 
