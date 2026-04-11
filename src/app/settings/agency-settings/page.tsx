@@ -1,5 +1,5 @@
-import AgencyPeopleSettingsPage from "@/src/page/settings/AgencyPeopleSettingsPage";
+import SettingsPeoplePage from "@/src/page/settings/SettingsPeoplePage";
 
 export default function AgencySettings() {
-  return <AgencyPeopleSettingsPage />;
+  return <SettingsPeoplePage />;
 }

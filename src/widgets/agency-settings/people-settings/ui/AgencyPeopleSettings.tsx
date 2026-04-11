@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Card,
   CardContent,
@@ -18,41 +16,21 @@ import {
   ItemSeparator,
   ItemTitle,
 } from "@/components/ui/item";
-import React from "react";
-import { skipToken } from "@reduxjs/toolkit/query/react";
+import React, { useEffect, useState } from "react";
 import AgencyInviteModal from "@/src/features/agency-invite/ui/AgencyInviteModal";
-import { useGetAgencyMembersQuery } from "@/src/entities/members/api/membersApi";
-import { useGetAgencyData } from "@/src/shared/hooks/api";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { useRedirectParams } from "@/src/shared/hooks/useRedirectParams";
-import { useAuth } from "@/src/shared/providers/authProvider";
 import { CircleUserRound } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { useSearchParams } from "next/navigation";
 
-const AgencyPeopleSettingsPage = () => {
-  const { selectedAgencyId, isLoading: isIdLoading } = useGetAgencyData();
+import { useGetUsersData } from "@/src/shared/hooks/api";
+import MobileTooltip from "@/src/shared/ui/MobileTooltip";
+
+const AgencyPeopleSettings = () => {
   const refirectParams = useRedirectParams();
-  const searchParams = useSearchParams();
+  const { currentUser, isLoading, agencyMembers } = useGetUsersData();
 
-  const { data, isLoading: isDataLoading } = useGetAgencyMembersQuery(
-    selectedAgencyId ? { agency_id: selectedAgencyId } : skipToken,
-  );
-
-  const handleChangeAgency = (id: string) => {
-    const params = new URLSearchParams(searchParams ?? "");
-    // отчищаем старый id
-    params.delete("agency_id");
-    // добавляем новый id
-    params.set("agency_id", id);
-  };
-
-  const { session } = useAuth();
+  const notAllowed = currentUser?.role !== "owner";
 
   const roles = {
     owner: "Администратор",
@@ -60,10 +38,8 @@ const AgencyPeopleSettingsPage = () => {
     member: "Участник",
   };
 
-  const isLoading = isIdLoading || isDataLoading;
-
   return (
-    <div className="container max-w-2xl">
+    <div className="max-w-2xl mx-auto">
       <Card size="sm">
         <CardHeader className="border-b pb-4">
           <CardTitle className="!text-xl">Настройки команды</CardTitle>
@@ -83,7 +59,7 @@ const AgencyPeopleSettingsPage = () => {
               Участники
             </CardTitle>
             <ItemGroup className="gap-0 rounded-lg border border-border bg-muted/30 p-1">
-              {data?.map((member, index) => (
+              {agencyMembers?.map((member, index) => (
                 <React.Fragment key={member.user_id}>
                   {index > 0 ? <ItemSeparator className="my-0" /> : null}
                   <Item
@@ -104,20 +80,15 @@ const AgencyPeopleSettingsPage = () => {
                         <Badge variant="outline">{roles[member.role]}</Badge>
                       </div>
                     </ItemContent>
-                    {session?.user?.id === member.user_id && (
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <div
-                            style={{ color: "var(--brand-300)" }}
-                            className="flex flex-row items-center gap-1"
-                          >
-                            <CircleUserRound size={18} />
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Это вы</p>
-                        </TooltipContent>
-                      </Tooltip>
+                    {currentUser?.user_id === member.user_id && (
+                      <MobileTooltip text="Это вы">
+                        <div
+                          style={{ color: "var(--brand-300)" }}
+                          className="flex flex-row items-center gap-1"
+                        >
+                          <CircleUserRound size={18} />
+                        </div>
+                      </MobileTooltip>
                     )}
                   </Item>
                 </React.Fragment>
@@ -126,7 +97,7 @@ const AgencyPeopleSettingsPage = () => {
           </CardContent>
         )}
         <CardFooter className="flex-col items-stretch border-t pt-4">
-          <AgencyInviteModal />
+          <AgencyInviteModal disabled={notAllowed} />
           <Button
             size="sm"
             className="w-full mt-2"
@@ -143,4 +114,4 @@ const AgencyPeopleSettingsPage = () => {
   );
 };
 
-export default AgencyPeopleSettingsPage;
+export default AgencyPeopleSettings;

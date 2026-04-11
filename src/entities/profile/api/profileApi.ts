@@ -50,7 +50,7 @@ export const profileApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["Profile"],
     }),
-    //3. Получение списка агенств
+    // 3. Получение списка агенств
     getAgency: build.query<Profile[], string | null | undefined>({
       queryFn: async (userId) => {
         if (!userId) return { data: [] };
