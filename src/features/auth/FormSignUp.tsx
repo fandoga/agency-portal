@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useCallback, useEffect, useState } from "react";
 import {
   Field,
@@ -7,19 +9,28 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/src/shared/api/supabase/client";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface FormSignUpType {
   action?: boolean;
+  setState?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const FormSignUp: React.FC<FormSignUpType> = ({ action }) => {
+const FormSignUp: React.FC<FormSignUpType> = ({ setState, action }) => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [Error, setError] = useState("");
   const [hasSent, setHasSent] = useState<boolean>(false);
+  const setLoadingState = useCallback(
+    (value: boolean) => {
+      setState?.(value);
+    },
+    [setState],
+  );
 
   const handleSubmitSignUp = useCallback(async () => {
+    setLoadingState(true);
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -30,13 +41,15 @@ const FormSignUp: React.FC<FormSignUpType> = ({ action }) => {
     }
 
     if (error) {
+      setLoadingState(false);
       setError(error.message);
     } else {
+      setLoadingState(false);
       setError("");
       console.log("Успешный вход:", data.user);
-      redirect("/agency");
+      router.push("/agency");
     }
-  }, [email, password]);
+  }, [email, password, router, setLoadingState]);
 
   useEffect(() => {
     if (action) {

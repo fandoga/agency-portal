@@ -26,14 +26,33 @@ import { useGetAgencyData } from "@/src/shared/hooks/api";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { useRedirectParams } from "@/src/shared/hooks/useRedirectParams";
+import { useAuth } from "@/src/shared/providers/authProvider";
+import { CircleUserRound } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useSearchParams } from "next/navigation";
 
 const AgencyPeopleSettingsPage = () => {
   const { selectedAgencyId, isLoading: isIdLoading } = useGetAgencyData();
   const refirectParams = useRedirectParams();
+  const searchParams = useSearchParams();
 
   const { data, isLoading: isDataLoading } = useGetAgencyMembersQuery(
     selectedAgencyId ? { agency_id: selectedAgencyId } : skipToken,
   );
+
+  const handleChangeAgency = (id: string) => {
+    const params = new URLSearchParams(searchParams ?? "");
+    // отчищаем старый id
+    params.delete("agency_id");
+    // добавляем новый id
+    params.set("agency_id", id);
+  };
+
+  const { session } = useAuth();
 
   const roles = {
     owner: "Администратор",
@@ -70,7 +89,7 @@ const AgencyPeopleSettingsPage = () => {
                   <Item
                     size="sm"
                     variant="default"
-                    className="border-0 shadow-none"
+                    className="border-0 shadow-none relative"
                   >
                     <ItemMedia className="pr-3">
                       <Avatar size="sm">
@@ -85,6 +104,21 @@ const AgencyPeopleSettingsPage = () => {
                         <Badge variant="outline">{roles[member.role]}</Badge>
                       </div>
                     </ItemContent>
+                    {session?.user?.id === member.user_id && (
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <div
+                            style={{ color: "var(--brand-300)" }}
+                            className="flex flex-row items-center gap-1"
+                          >
+                            <CircleUserRound size={18} />
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Это вы</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
                   </Item>
                 </React.Fragment>
               ))}

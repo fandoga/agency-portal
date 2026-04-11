@@ -13,7 +13,6 @@ const ChooseAgencyList = () => {
 
   const handleAgencyClick = (term: string) => {
     // Создаем изменяемый объект на основе текущих параметров
-
     const params = new URLSearchParams(searchParams ?? "");
 
     if (term) {

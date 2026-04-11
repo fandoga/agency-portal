@@ -12,13 +12,13 @@ import {
 import FormSignIn from "@/src/features/auth/FormSignIn";
 import { Separator } from "@/components/ui/separator";
 import FormSignUp from "@/src/features/auth/FormSignUp";
-import { useAuth } from "@/src/shared/providers/authProvider";
+import { Spinner } from "@/components/ui/spinner";
 
 const AgencyAuth = () => {
   const [isSignUp, setSignUp] = useState<boolean>(false);
   const [submit, setSubmit] = useState<boolean>(false);
-
-  const { session } = useAuth();
+  const [isLoading, setLoading] = useState<boolean>(false);
+  console.log(isLoading);
 
   return (
     <div className="w-full mb-20">
@@ -34,13 +34,14 @@ const AgencyAuth = () => {
         <Separator />
         <CardContent>
           {isSignUp ? (
-            <FormSignUp action={submit} />
+            <FormSignUp setState={setLoading} action={submit} />
           ) : (
-            <FormSignIn action={submit} />
+            <FormSignIn setState={setLoading} action={submit} />
           )}
         </CardContent>
         <CardFooter className="flex justify-center gap-4">
           <Button
+            disabled={isLoading}
             onClick={() => {
               setSubmit(true);
               setTimeout(() => setSubmit(false), 200);
@@ -48,6 +49,7 @@ const AgencyAuth = () => {
             className="flex-1"
             size="sm"
           >
+            {isLoading && <Spinner />}
             {isSignUp ? "Регистрация" : "Войти"}
           </Button>
           <Button

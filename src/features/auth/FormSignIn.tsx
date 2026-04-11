@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useCallback, useEffect, useState } from "react";
 import {
   Field,
@@ -7,31 +9,42 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/src/shared/api/supabase/client";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface FormSignInType {
   action: boolean;
+  setState?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const FormSignIn: React.FC<FormSignInType> = ({ action }) => {
+const FormSignIn: React.FC<FormSignInType> = ({ setState, action }) => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [Error, setError] = useState("");
+  const setLoadingState = useCallback(
+    (value: boolean) => {
+      setState?.(value);
+    },
+    [setState],
+  );
 
   const handleSubmitSignIn = useCallback(async () => {
+    setLoadingState(true);
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (error) {
+      setLoadingState(false);
       setError(error.message);
     } else {
+      setLoadingState(false);
       console.log("Успешный вход:", data.user);
       setError("");
-      redirect("/agency");
+      router.push("/agency");
     }
-  }, [email, password]);
+  }, [email, password, router, setLoadingState]);
 
   useEffect(() => {
     if (action) {
@@ -55,9 +68,6 @@ const FormSignIn: React.FC<FormSignInType> = ({ action }) => {
               type="mail"
               placeholder="youemail@gmail.com"
             />
-            <FieldDescription>
-              Укажите почту, на нее прийдет подтверждение
-            </FieldDescription>
           </Field>
           <Field>
             <FieldLabel htmlFor="password">Пароль</FieldLabel>

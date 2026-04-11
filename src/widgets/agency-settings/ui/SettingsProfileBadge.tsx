@@ -5,12 +5,15 @@ import { Separator } from "@/components/ui/separator";
 import ProfileBadge from "@/src/entities/profile/ui/ProfileBadge";
 import { supabase } from "@/src/shared/api/supabase/client";
 import { useGetAgencyData } from "@/src/shared/hooks/api";
-import { redirect } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 
 const SettingsProfileBadge = ({}) => {
   const [open, setOpen] = useState(false);
   const { session, otherAgency } = useGetAgencyData();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const handleLogOut = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -20,8 +23,18 @@ const SettingsProfileBadge = ({}) => {
       alert("Ошибка при выходе из профиля: " + error.message);
     } else {
       // спецциально используем обычный redirect, нам не нужно сохранять searchParams
-      redirect("/auth");
+      router.push("/auth");
     }
+  };
+
+  const handleChangeAgency = (id: string) => {
+    const params = new URLSearchParams(searchParams?.toString());
+    // отчищаем старый id
+    params.delete("agency_id");
+    // добавляем новый id
+    params.set("agency_id", id);
+    router.replace(`${pathname}?${params.toString()}`);
+    setOpen(false);
   };
 
   return (
@@ -42,6 +55,7 @@ const SettingsProfileBadge = ({}) => {
                 {otherAgency?.map((ag) => (
                   <div className="mt-4 mb-4 mx-auto w-[90%]" key={ag.id}>
                     <ProfileBadge
+                      onClick={() => handleChangeAgency(ag.id)}
                       hasDrodown={false}
                       logo={ag?.logo_url}
                       name={ag?.agency_name}

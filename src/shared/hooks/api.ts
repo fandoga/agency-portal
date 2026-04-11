@@ -1,10 +1,14 @@
 import { useGetAgencyQuery } from "@/src/entities/profile/api/profileApi";
 import type { Profile } from "@/src/entities/profile/lib/types";
 import { useSearchParams } from "next/navigation";
+import { useAuth } from "@/src/shared/providers/authProvider";
 
 export const useGetAgencyData = () => {
   const searchParams = useSearchParams();
-  const { data, isLoading } = useGetAgencyQuery();
+  const { session: authSession } = useAuth();
+  const { data, isLoading } = useGetAgencyQuery(authSession?.user?.id, {
+    refetchOnMountOrArgChange: true,
+  });
   if (!data) {
     return {
       agencies: [] as Profile[],
