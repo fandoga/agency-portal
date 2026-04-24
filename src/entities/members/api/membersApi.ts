@@ -65,8 +65,6 @@ export const membersApi = baseApi.injectEndpoints({
     // 4. Добавление участника в агентство
     createAgencyMember: build.mutation<Member, createAgencyMemberType>({
       queryFn: async ({ user_id, token, role }) => {
-        const id = crypto.randomUUID();
-
         const { data, error } = await supabase.rpc("accept_agency_invite", {
           p_token: token,
           p_user_id: user_id,

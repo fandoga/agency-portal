@@ -17,6 +17,7 @@ import { useCreateNewInviteMutation } from "@/src/entities/members/api/membersAp
 import { Item } from "@/components/ui/item";
 import { QueryStatus } from "@reduxjs/toolkit/query";
 import OwnerInviteModal from "./OwnerInviteModal";
+import { useAuth } from "@/src/shared/providers/authProvider";
 
 type PendingPayload = {
   agency_id: string;
@@ -186,7 +187,7 @@ const FormAgencyInvite = ({
                     ? isCopied
                       ? "Скопировано"
                       : "Скопировать"
-                    : isError
+                    : isError || apiErrorMessage
                       ? "Повторить"
                       : "Сгенерировать"}
               </Button>

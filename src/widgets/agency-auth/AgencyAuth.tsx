@@ -31,13 +31,14 @@ const AgencyAuth = () => {
         <Separator />
         <CardContent>
           {isSignUp ? (
-            <FormSignUp action={submit} />
+            <FormSignUp setState={setLoading} action={submit} />
           ) : (
-            <FormSignIn action={submit} />
+            <FormSignIn setState={setLoading} action={submit} />
           )}
         </CardContent>
         <CardFooter className="flex justify-center gap-4">
           <Button
+            disabled={isLoading}
             onClick={() => {
               setSubmit(true);
               setTimeout(() => setSubmit(false), 200);
@@ -45,6 +46,7 @@ const AgencyAuth = () => {
             className="flex-1"
             size="sm"
           >
+            {isLoading && <Spinner />}
             {isSignUp ? "Регистрация" : "Войти"}
           </Button>
           <Button

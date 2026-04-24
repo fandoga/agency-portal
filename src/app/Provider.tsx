@@ -1,5 +1,6 @@
 "use client";
 
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "../shared/providers/authProvider";
 import { AppDragDropProvider } from "../shared/providers/dragdropProvider";
 import { ReduxProvider } from "../shared/providers/reduxProvider";
@@ -9,7 +10,9 @@ const Provider = ({ children }: providersType) => {
   return (
     <AuthProvider>
       <ReduxProvider>
-        <AppDragDropProvider>{children}</AppDragDropProvider>
+        <TooltipProvider>
+          <AppDragDropProvider>{children}</AppDragDropProvider>
+        </TooltipProvider>
       </ReduxProvider>
     </AuthProvider>
   );

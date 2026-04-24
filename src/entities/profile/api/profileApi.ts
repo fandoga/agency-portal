@@ -50,9 +50,10 @@ export const profileApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["Profile"],
     }),
-    //3. Получение списка агенств
-    getAgency: build.query<Profile[], void>({
-      queryFn: async () => {
+    // 3. Получение списка агенств
+    getAgency: build.query<Profile[], string | null | undefined>({
+      queryFn: async (userId) => {
+        if (!userId) return { data: [] };
         const { data, error } = await supabase
           .from("profiles")
           .select("*")
