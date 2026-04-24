@@ -30,7 +30,7 @@ const FormSignUp: React.FC<FormSignUpType> = ({ action }) => {
     }
 
     if (error) {
-      setError(error.message);
+      setError(error.message === "Invalid login credentials" ? "Неверный логин или пароль" : error.message);
     } else {
       setError("");
       console.log("Успешный вход:", data.user);
@@ -81,7 +81,7 @@ const FormSignUp: React.FC<FormSignUpType> = ({ action }) => {
           </p>
         )}
         {Error?.length > 0 && (
-          <p className="text-red-600 pt-4">{"Ошибка входа: " + Error}</p>
+          <p className="text-red-600 pt-4">{Error}</p>
         )}
       </form>
     </div>

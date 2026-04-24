@@ -12,13 +12,10 @@ import {
 import FormSignIn from "@/src/features/auth/FormSignIn";
 import { Separator } from "@/components/ui/separator";
 import FormSignUp from "@/src/features/auth/FormSignUp";
-import { useAuth } from "@/src/shared/providers/authProvider";
 
 const AgencyAuth = () => {
   const [isSignUp, setSignUp] = useState<boolean>(false);
   const [submit, setSubmit] = useState<boolean>(false);
-
-  const { session } = useAuth();
 
   return (
     <div className="w-full mb-20">

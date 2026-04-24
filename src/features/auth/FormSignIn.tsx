@@ -25,7 +25,11 @@ const FormSignIn: React.FC<FormSignInType> = ({ action }) => {
     });
 
     if (error) {
-      setError(error.message);
+      setError(
+        error.message === "Invalid login credentials"
+          ? "Неверный логин или пароль"
+          : error.message,
+      );
     } else {
       console.log("Успешный вход:", data.user);
       setError("");
@@ -70,9 +74,7 @@ const FormSignIn: React.FC<FormSignInType> = ({ action }) => {
             <FieldDescription>Как минимум 8 символов</FieldDescription>
           </Field>
         </FieldGroup>
-        {Error && (
-          <p className="text-red-600 pt-4">{"Ошибка входа: " + Error}</p>
-        )}
+        {Error && <p className="text-red-600 pt-4">{Error}</p>}
       </form>
     </div>
   );
