@@ -16,6 +16,12 @@ import { useCreateAgencyMemberMutation } from "@/src/entities/members/api/member
 import { Invite } from "@/src/entities/members/lib/types";
 import { redirect } from "next/navigation";
 
+export const roles = {
+  owner: "Администратора",
+  admin: "Менеджера",
+  member: "Участника",
+};
+
 interface AgencyInviteCardType {
   data: Invite[] | undefined;
   token: string;
@@ -41,12 +47,6 @@ const AgencyInviteCard: React.FC<AgencyInviteCardType> = ({ data, token }) => {
       });
     }
   }, [invite, invite?.status]);
-
-  const roles = {
-    owner: "Администратора",
-    admin: "Менеджера",
-    member: "Участника",
-  };
 
   const handleAccept = async () => {
     if (!session?.user?.id) {

@@ -30,13 +30,14 @@ const AgencySettings: React.FC<AgencySettingsType> = ({ session }) => {
             Настройки команды
           </Button>
           <Button
-            onClick={() => redirectParams("/settings/agency-settings")}
+            onClick={() => redirectParams("/settings/organization-settings")}
             size={"sm"}
-            variant="outline"
           >
             Настройки организации
           </Button>
-          <Button size={"sm"}>Приложение</Button>
+          <Button size={"sm"} variant="outline">
+            Приложение
+          </Button>
           <Button size={"sm"} variant={"outline"}>
             Другое
           </Button>

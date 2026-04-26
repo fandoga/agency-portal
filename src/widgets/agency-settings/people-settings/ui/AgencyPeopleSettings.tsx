@@ -16,18 +16,18 @@ import {
   ItemSeparator,
   ItemTitle,
 } from "@/components/ui/item";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AgencyInviteModal from "@/src/features/agency-invite/ui/AgencyInviteModal";
+import SentInvitesModal from "@/src/features/sent-invites-modal/ui/SentInvitesModal";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
-import { useRedirectParams } from "@/src/shared/hooks/useRedirectParams";
 import { CircleUserRound } from "lucide-react";
 
 import { useGetUsersData } from "@/src/shared/hooks/api";
 import MobileTooltip from "@/src/shared/ui/MobileTooltip";
 
 const AgencyPeopleSettings = () => {
-  const refirectParams = useRedirectParams();
+  const [sentInvitesOpen, setSentInvitesOpen] = useState(false);
   const { currentUser, isLoading, agencyMembers } = useGetUsersData();
 
   const notAllowed = currentUser?.role !== "owner";
@@ -102,14 +102,17 @@ const AgencyPeopleSettings = () => {
             size="sm"
             className="w-full mt-2"
             variant={"outline"}
-            onClick={() => {
-              refirectParams("setttings/agency-settings/invites");
-            }}
+            onClick={() => setSentInvitesOpen(true)}
           >
             Отправленные приглашения
           </Button>
         </CardFooter>
       </Card>
+
+      <SentInvitesModal
+        open={sentInvitesOpen}
+        onOpenChange={setSentInvitesOpen}
+      />
     </div>
   );
 };

@@ -155,6 +155,6 @@
   }
 
   .container {
-    @apply mb-10 px-4 pt-6 h-[100vh];
+    @apply px-4 pt-6 pb-32 min-h-[100vh];
   }
 }

@@ -1,6 +1,11 @@
 import { supabase } from "@/src/shared/api/supabase/client";
 import { baseApi } from "@/src/shared/api/baseApi";
-import { CreateProfileInput, DeleteProfileArg, Profile } from "../lib/types";
+import {
+  CreateProfileInput,
+  DeleteProfileArg,
+  Profile,
+  UpdateOrganizationSettingsInput,
+} from "../lib/types";
 
 export const profileApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -64,6 +69,60 @@ export const profileApi = baseApi.injectEndpoints({
       },
       providesTags: ["Profile"],
     }),
+    // 4. Обновление настроек организации
+    updateOrganizationSettings: build.mutation<
+      Profile,
+      UpdateOrganizationSettingsInput
+    >({
+      queryFn: async ({ profileId, agency_name, color_theme, logo_url }) => {
+        // 1. Verify authentication
+        const { data: userData, error: userErr } =
+          await supabase.auth.getUser();
+        if (userErr || !userData.user) return { error: userErr };
+
+        // 2. Build update object (only provided fields)
+        const updates: Partial<Profile> = {};
+        if (agency_name !== undefined) updates.agency_name = agency_name;
+        if (color_theme !== undefined) updates.color_theme = color_theme;
+        if (logo_url !== undefined) updates.logo_url = logo_url;
+
+        // 3. Update profile
+        const { data, error } = await supabase
+          .from("profiles")
+          .update(updates)
+          .eq("id", profileId)
+          .select()
+          .single();
+
+        if (error) return { error };
+        return { data };
+      },
+      invalidatesTags: (result, error, { profileId }) =>
+        result ? [{ type: "Profile", id: profileId }, "Profile"] : [],
+      // Optimistic update
+      async onQueryStarted(
+        { profileId, ...patch },
+        { dispatch, queryFulfilled },
+      ) {
+        const patchResult = dispatch(
+          profileApi.util.updateQueryData(
+            "getAgency",
+            undefined,
+            (draft: Profile[]) => {
+              const profile = draft.find((p) => p.id === profileId);
+              if (profile) {
+                Object.assign(profile, patch);
+              }
+            },
+          ),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -71,4 +130,5 @@ export const {
   useCreateNewProfileMutation,
   useGetAgencyQuery,
   useDeleteProfileMutation,
+  useUpdateOrganizationSettingsMutation,
 } = profileApi;

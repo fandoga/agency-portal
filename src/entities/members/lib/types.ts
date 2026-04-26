@@ -24,7 +24,8 @@ export interface Invite {
   id: string;
   role: Role;
   token: string;
-  status?: Status | null;
-  created_at?: string;
+  status: Status;
+  created_at: string;
   agency_name: string;
+  agency_id: string;
 }

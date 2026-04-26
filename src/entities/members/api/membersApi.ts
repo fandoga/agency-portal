@@ -76,6 +76,70 @@ export const membersApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["Members"],
     }),
+    // 5. Получение всех приглашений агентства
+    getAgencyInvites: build.query<Invite[], string>({
+      queryFn: async (agency_id) => {
+        // Validate authentication
+        const { data: userData, error: userErr } =
+          await supabase.auth.getUser();
+        if (userErr) return { error: userErr };
+        if (!userData.user) return { error: { message: "Not authenticated" } };
+
+        // Fetch invites with agency name
+        const { data, error } = await supabase
+          .from("invites")
+          .select(
+            `
+            id,
+            role,
+            token,
+            status,
+            created_at,
+            agency_id,
+            profiles!inner(agency_name)
+          `,
+          )
+          .eq("agency_id", agency_id)
+          .order("created_at", { ascending: false });
+
+        if (error) return { error };
+
+        // Transform data to flatten agency_name
+        const transformedData: Invite[] =
+          data?.map((invite: any) => ({
+            id: invite.id,
+            role: invite.role,
+            token: invite.token,
+            status: invite.status,
+            created_at: invite.created_at,
+            agency_id: invite.agency_id,
+            agency_name: invite.profiles.agency_name,
+          })) || [];
+
+        return { data: transformedData };
+      },
+      providesTags: ["Members"],
+    }),
+    // 6. Удаление приглашения
+    deleteInvite: build.mutation<void, string>({
+      queryFn: async (invite_id) => {
+        // Validate authentication
+        const { data: userData, error: userErr } =
+          await supabase.auth.getUser();
+        if (userErr) return { error: userErr };
+        if (!userData.user) return { error: { message: "Not authenticated" } };
+
+        // Delete the invite
+        const { error } = await supabase
+          .from("invites")
+          .delete()
+          .eq("id", invite_id);
+
+        if (error) return { error };
+        return { data: undefined };
+      },
+      invalidatesTags: ["Members"],
+    }),
   }),
 });
 
@@ -84,4 +148,6 @@ export const {
   useGetInviteByTokenQuery,
   useCreateNewInviteMutation,
   useCreateAgencyMemberMutation,
+  useGetAgencyInvitesQuery,
+  useDeleteInviteMutation,
 } = membersApi;

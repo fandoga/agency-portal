@@ -13,6 +13,22 @@ const rtkRoot = path.resolve(process.cwd(), "node_modules/@reduxjs/toolkit");
 
 const nextConfig: NextConfig = {
   transpilePackages: ["react-redux", "@reduxjs/toolkit"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "github.com",
+      },
+      {
+        protocol: "https",
+        hostname: "**.supabase.co",
+      },
+      {
+        protocol: "https",
+        hostname: "**.supabase.in",
+      },
+    ],
+  },
   turbopack: {
     resolveAlias: {
       "react-redux": "./node_modules/react-redux",
