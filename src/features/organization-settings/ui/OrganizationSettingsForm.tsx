@@ -13,6 +13,8 @@ import {
   validateColorTheme,
   validateLogoUrl,
 } from "../lib/validation";
+import MobileTooltip from "@/src/shared/ui/MobileTooltip";
+import { CircleQuestionMark } from "lucide-react";
 
 interface OrganizationSettingsFormProps {
   agency: Profile;
@@ -198,7 +200,11 @@ export function OrganizationSettingsForm({
       <div className="space-y-2">
         <Label htmlFor="color_theme" className="text-sm sm:text-base">
           Цветовая тема
+          <MobileTooltip text="Если у вашей организации есть своя стилистика, вы можете использовать ее. Этот цвет интерфейса увидит клиент.">
+            <CircleQuestionMark size={17} className="opacity-60" />
+          </MobileTooltip>
         </Label>
+
         <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
           <Input
             ref={colorThemeRef}
@@ -207,22 +213,12 @@ export function OrganizationSettingsForm({
             value={colorTheme || "#000000"}
             onChange={(e) => handleFieldChange("color_theme", e.target.value)}
             disabled={isLoading}
-            className="w-20 h-10 cursor-pointer"
+            className="w-18 h-12 cursor-pointer"
             aria-invalid={!!errors.color_theme}
             aria-describedby={
               errors.color_theme ? "color_theme-error" : undefined
             }
             aria-label="Выбрать цвет темы"
-          />
-          <Input
-            type="text"
-            value={colorTheme}
-            onChange={(e) => handleFieldChange("color_theme", e.target.value)}
-            onBlur={(e) => handleFieldChange("color_theme", e.target.value)}
-            placeholder="#RRGGBB или #RGB"
-            disabled={isLoading}
-            className="flex-1"
-            aria-label="Код цвета в формате hex"
           />
         </div>
         {errors.color_theme && (

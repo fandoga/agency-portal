@@ -21,7 +21,7 @@ const AgencySettings: React.FC<AgencySettingsType> = ({ session }) => {
         <CardHeader>{session && <SettingsProfileBadge />}</CardHeader>
         <Separator className={` transition-all`} />
         <CardContent
-          className={`flex h-full flex-col transition-all pt-4 gap-4`}
+          className={`flex h-full flex-col transition-all pt-4 gap-3`}
         >
           <Button
             onClick={() => redirectParams("/settings/agency-settings")}
@@ -32,14 +32,9 @@ const AgencySettings: React.FC<AgencySettingsType> = ({ session }) => {
           <Button
             onClick={() => redirectParams("/settings/organization-settings")}
             size={"sm"}
+            variant={"outline"}
           >
             Настройки организации
-          </Button>
-          <Button size={"sm"} variant="outline">
-            Приложение
-          </Button>
-          <Button size={"sm"} variant={"outline"}>
-            Другое
           </Button>
         </CardContent>
       </Card>

@@ -9,7 +9,7 @@ const ChooseAgencyPage = () => {
   const { agencies, isLoading } = useGetAgencyData();
 
   return (
-    <div className="container h-[100vh]">
+    <div className="px-4 pt-6 h-[100vh]">
       {isLoading ? (
         <Loading text="Подгружаем ваши профили" />
       ) : agencies.length > 0 ? (
