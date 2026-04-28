@@ -33,6 +33,7 @@ interface SentInvitesModalProps {
 const SentInvitesModal = ({ open, onOpenChange }: SentInvitesModalProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedInviteId, setSelectedInviteId] = useState<string | null>(null);
+  const [Error, setError] = useState("");
 
   const { selectedAgencyId } = useGetAgencyData();
   const {
@@ -62,8 +63,12 @@ const SentInvitesModal = ({ open, onOpenChange }: SentInvitesModalProps) => {
       await deleteInvite(selectedInviteId).unwrap();
       setDeleteDialogOpen(false);
       setSelectedInviteId(null);
+      setError("");
     } catch (error) {
-      alert("Не удалось отменить приглашение");
+      if (typeof error === "string") {
+        setError(error);
+      }
+      setError("Не удалось отменить приглашение");
     }
   };
 
@@ -88,12 +93,15 @@ const SentInvitesModal = ({ open, onOpenChange }: SentInvitesModalProps) => {
           ) : invites && invites.length === 0 ? (
             <EmptyInvites />
           ) : invites && invites.length > 0 ? (
-            <InvitesList
-              invites={invites}
-              onCopyLink={handleCopyLink}
-              onDeleteInvite={handleDeleteClick}
-              isDeleting={isDeleting}
-            />
+            <>
+              <InvitesList
+                invites={invites}
+                onCopyLink={handleCopyLink}
+                onDeleteInvite={handleDeleteClick}
+                isDeleting={isDeleting}
+              />
+              <span className="text-destructive">{Error}</span>
+            </>
           ) : null}
         </DialogContent>
       </Dialog>

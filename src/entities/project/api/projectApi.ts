@@ -1,6 +1,6 @@
 import { supabase } from "@/src/shared/api/supabase/client"; // Твой конфиг супабейза
 import { baseApi } from "@/src/shared/api/baseApi";
-import { createProjectType, Project } from "../lib/types";
+import { createProjectType, Project, ClientProjectData } from "../lib/types";
 
 export const projectApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -79,6 +79,64 @@ export const projectApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["Project"],
     }),
+
+    // 5. Получение проекта для клиентского портала (с данными агентства)
+    getClientProjectByShareToken: build.query<ClientProjectData, string>({
+      queryFn: async (shareToken) => {
+        // Получаем проект с milestones
+        const { data: project, error: projectError } = await supabase
+          .from("projects")
+          .select("*, milestones(*)")
+          .eq("share_token", shareToken)
+          .single();
+
+        if (projectError) {
+          return {
+            error: {
+              status: 404,
+              data: { message: "Project not found" },
+            },
+          };
+        }
+
+        if (!project) {
+          return {
+            error: {
+              status: 404,
+              data: { message: "Project not found" },
+            },
+          };
+        }
+
+        // Получаем данные агентства
+        const { data: agency, error: agencyError } = await supabase
+          .from("profiles")
+          .select("agency_name, logo_url, color_theme")
+          .eq("id", project.agency_id)
+          .single();
+
+        if (agencyError) {
+          return {
+            error: {
+              status: 500,
+              data: { message: "Failed to fetch agency data" },
+            },
+          };
+        }
+
+        return {
+          data: {
+            project,
+            agency: {
+              agency_name: agency.agency_name,
+              logo_url: agency.logo_url,
+              color_theme: agency.color_theme,
+            },
+          },
+        };
+      },
+      providesTags: (result) => [{ type: "Project", id: result?.project.id }],
+    }),
   }),
 });
 
@@ -87,4 +145,5 @@ export const {
   useCreateNewProjectMutation,
   useGetAgencyProjectsQuery,
   useDeleteProjectMutation,
+  useGetClientProjectByShareTokenQuery,
 } = projectApi;

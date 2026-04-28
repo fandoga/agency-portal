@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import ProjectDescription from "./ProjectDescription";
 import { useDraggable } from "@dnd-kit/react";
 import { RestrictToHorizontalAxis } from "@dnd-kit/abstract/modifiers";
@@ -16,7 +17,8 @@ import {
   RestrictLeftWithLimit,
   RestrictRightWithLimit,
 } from "@/src/shared/utils/dnd-modifiers/RestrictLeftWithLimit";
-import { Trash2 } from "lucide-react";
+import { Trash2, Share2 } from "lucide-react";
+import { ShareAccessModal } from "@/src/features/share-access";
 
 const ProjectCard = ({ project }: { project: Project }) => {
   const statusLabelMap: Record<NonNullable<Project["status"]>, string> = {
@@ -66,35 +68,39 @@ const ProjectCard = ({ project }: { project: Project }) => {
   const [rndmValue] = useState(() => Math.random() * (100 - 0));
 
   return (
-    <div
-      ref={ref}
-      className="relative w-full touch-none select-none overscroll-contain"
-      style={{ touchAction: "none", WebkitTouchCallout: "none" }}
-    >
-      <Item className="py-3" variant={"outline"}>
-        <ItemContent>
-          <div className="flex justify-between items-center pb-2">
-            <ItemTitle className="text-lg">
-              <span className="inline-flex">{project.name}</span>
-            </ItemTitle>
-            <Badge className={badgeClassName}>{statusLabel}</Badge>
-          </div>
-          <Accordion type="single" collapsible defaultValue="plans">
-            <AccordionItem value={"item"}>
-              <AccordionTrigger className="p-0 ">
-                <Progress value={rndmValue} className="w-[80%] "></Progress>
-              </AccordionTrigger>
-              <AccordionContent className="pb-0 h-auto">
-                <ProjectDescription project={project} />
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </ItemContent>
-      </Item>
-      <div className="absolute top-0 right-[-40%] bg-brand-600 h-full rounded-lg w-28">
-        <Trash2 className="m-auto mr-15 h-full" color="white" size={32} />
+    <>
+      <div
+        ref={ref}
+        className="relative w-full touch-none select-none overscroll-contain"
+        style={{ touchAction: "none", WebkitTouchCallout: "none" }}
+      >
+        <Item className="py-3" variant={"outline"}>
+          <ItemContent>
+            <div className="flex justify-between items-center pb-2">
+              <ItemTitle className="text-lg">
+                <span className="inline-flex">{project.name}</span>
+              </ItemTitle>
+              <div className="flex items-center gap-2">
+                <Badge className={badgeClassName}>{statusLabel}</Badge>
+              </div>
+            </div>
+            <Accordion type="single" collapsible defaultValue="plans">
+              <AccordionItem value={"item"}>
+                <AccordionTrigger className="p-0 ">
+                  <Progress value={rndmValue} className="w-[80%] "></Progress>
+                </AccordionTrigger>
+                <AccordionContent className="pb-0 h-auto">
+                  <ProjectDescription project={project} />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </ItemContent>
+        </Item>
+        <div className="absolute top-0 right-[-40%] bg-brand-600 h-full rounded-lg w-28">
+          <Trash2 className="m-auto mr-15 h-full" color="white" size={32} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

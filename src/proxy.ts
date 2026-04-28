@@ -34,13 +34,23 @@ export async function proxy(req: NextRequest) {
 
   const isAuthPage = req.nextUrl.pathname === "/auth";
   const isInvitePage = req.nextUrl.pathname.startsWith("/invite");
+  const isClientPortal = req.nextUrl.pathname.startsWith("/client");
   const defaultPage = req.nextUrl.pathname === "/";
   const isChooseAgencyPage = req.nextUrl.pathname.startsWith(
     "/auth/choose-agency",
   );
   const selectedAgencyId = req.nextUrl.searchParams.get("agency_id");
 
-  // Перенос на логин если нету сессии
+  // Клиентский портал - пропускаем все проверки agency_id
+  if (isClientPortal) {
+    if (!user && !req.nextUrl.pathname.startsWith("/client/auth")) {
+      // Если нет сессии и это не страница авторизации клиента - редирект на клиентскую авторизацию
+      return NextResponse.redirect(new URL("/client/auth", req.url));
+    }
+    return response;
+  }
+
+  // Перенос на логин если нету сессии (только для агентства)
   if (!user && !isAuthPage) {
     return NextResponse.redirect(new URL("/auth", req.url));
   }
@@ -50,7 +60,7 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL("/agency", req.url));
   }
 
-  // Перенос на выбор команды если в url нет agency_id
+  // Перенос на выбор команды если в url нет agency_id (только для агентства)
   if (!selectedAgencyId && !isChooseAgencyPage && user && !isInvitePage) {
     return NextResponse.redirect(new URL("/auth/choose-agency", req.url));
   }

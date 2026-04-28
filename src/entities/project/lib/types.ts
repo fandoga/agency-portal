@@ -23,3 +23,13 @@ export interface createProjectType {
   description?: string | null;
   status?: ProjectStatus | null;
 }
+
+// Тип для клиентского портала с данными агентства
+export interface ClientProjectData {
+  project: Project;
+  agency: {
+    agency_name: string;
+    logo_url?: string | null;
+    color_theme?: string | null;
+  };
+}

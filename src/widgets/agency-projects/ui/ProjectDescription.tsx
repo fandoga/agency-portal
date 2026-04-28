@@ -5,13 +5,15 @@ import { Separator } from "@/components/ui/separator";
 import { Project } from "@/src/entities/project/lib/types";
 import CreateMilestoneModal from "@/src/features/projects/create-milestone/CreateMilestoneModal";
 import { useDeleteMilestoneMutation } from "@/src/entities/milestone/api/milestoneApi";
-import { Trash2 } from "lucide-react";
-import React from "react";
+import { Share2, Trash2 } from "lucide-react";
+import React, { useState } from "react";
 import { useGetAgencyData } from "@/src/shared/hooks/api";
+import { ShareAccessModal } from "@/src/features/share-access";
 
 const ProjectDescription = ({ project }: { project: Project }) => {
   const [deleteMilestone, { isLoading: isDeleting }] =
     useDeleteMilestoneMutation();
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const { selectedAgencyId } = useGetAgencyData();
 
@@ -79,14 +81,39 @@ const ProjectDescription = ({ project }: { project: Project }) => {
           </ul>
         </div>
       )}
-      <CreateMilestoneModal
-        projectId={project.id}
-        trigger={
-          <Button size="xs" type="button">
-            Новая задача
-          </Button>
-        }
-      />
+      <div className="flex justify-between items-center">
+        <CreateMilestoneModal
+          projectId={project.id}
+          trigger={
+            <Button size="xs" type="button">
+              Новая задача
+            </Button>
+          }
+        />
+        <Button
+          size="xs"
+          type="button"
+          variant="ghost"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsShareModalOpen(true);
+          }}
+          className="h-8 px-2 bg-muted"
+        >
+          <Share2 className="h-4 w-4 mr-1" />
+          Поделиться
+        </Button>
+      </div>
+
+      {/* Модалка для отправки Magic Link */}
+      {project.share_token && (
+        <ShareAccessModal
+          open={isShareModalOpen}
+          onOpenChange={setIsShareModalOpen}
+          projectName={project.name}
+          shareToken={project.share_token}
+        />
+      )}
     </div>
   );
 };
