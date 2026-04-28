@@ -9,7 +9,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import FormProjectCreate from "./FormAgencyCreate";
+import FormAgencyCreate from "./FormAgencyCreate";
 
 interface CreateAgencyModalType {
   text: string;
@@ -37,7 +37,8 @@ const CreateAgencyModal: React.FC<CreateAgencyModalType> = ({
         <AlertDialogTrigger asChild>
           <Button
             variant={variant || "default"}
-            className="rounded-full w-full"
+            size={"sm"}
+            className={`${variant !== "outline" && "rounded-full"}w-full`}
           >
             {text}
           </Button>
@@ -53,7 +54,7 @@ const CreateAgencyModal: React.FC<CreateAgencyModalType> = ({
             Создание новой команды с указанным названием и ссылками на веб-сайт
             и логотип
           </AlertDialogDescription>
-          <FormProjectCreate
+          <FormAgencyCreate
             key={open ? "project-form-open" : "project-form-closed"}
             onRequestClose={() => setOpen(false)}
             initialFocusRef={initialFocusRef}

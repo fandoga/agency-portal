@@ -73,7 +73,7 @@ export default function ShareAccessModal({
         <DialogHeader>
           <DialogTitle>Поделиться доступом к проекту</DialogTitle>
           <DialogDescription>
-            Отправьте клиенту ссылку для доступа к проекту "{projectName}"
+            Отправьте клиенту ссылку для доступа к проекту {projectName}
           </DialogDescription>
         </DialogHeader>
 

@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import ProfileBadge from "@/src/entities/profile/ui/ProfileBadge";
+import CreateAgencyModal from "@/src/features/agencies/create-agency/CreateAgencyModal";
 import { supabase } from "@/src/shared/api/supabase/client";
 import { useGetAgencyData } from "@/src/shared/hooks/api";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -66,9 +67,7 @@ const SettingsProfileBadge = ({}) => {
               </div>
             )}
             <div className="w-[85%] flex gap-2 pt-4">
-              <Button variant="outline" size={"sm"}>
-                Добавить команду
-              </Button>
+              <CreateAgencyModal variant="outline" text="Добавить команду" />
               <Button
                 onClick={(e) => handleLogOut(e)}
                 className="flex-1"
