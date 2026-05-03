@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Item, ItemContent, ItemTitle } from "@/components/ui/item";
 import { Project } from "@/src/entities/project/lib/types";
 import {
@@ -17,8 +17,7 @@ import {
   RestrictLeftWithLimit,
   RestrictRightWithLimit,
 } from "@/src/shared/utils/dnd-modifiers/RestrictLeftWithLimit";
-import { Trash2, Share2 } from "lucide-react";
-import { ShareAccessModal } from "@/src/features/share-access";
+import { Trash2 } from "lucide-react";
 
 const ProjectCard = ({ project }: { project: Project }) => {
   const statusLabelMap: Record<NonNullable<Project["status"]>, string> = {
@@ -65,7 +64,11 @@ const ProjectCard = ({ project }: { project: Project }) => {
     disabled: false,
   });
 
-  const [rndmValue] = useState(() => Math.random() * (100 - 0));
+  const progressValue = useMemo(() => {
+    const all = project.milestones || [];
+    const ready = all?.filter((mile) => mile.status === "done") || [];
+    return 100 / (all.length / ready.length);
+  }, [project.milestones]);
 
   return (
     <>
@@ -87,7 +90,10 @@ const ProjectCard = ({ project }: { project: Project }) => {
             <Accordion type="single" collapsible defaultValue="plans">
               <AccordionItem value={"item"}>
                 <AccordionTrigger className="p-0 ">
-                  <Progress value={rndmValue} className="w-[80%] "></Progress>
+                  <Progress
+                    value={progressValue}
+                    className="w-[80%] "
+                  ></Progress>
                 </AccordionTrigger>
                 <AccordionContent className="pb-0 h-auto">
                   <ProjectDescription project={project} />

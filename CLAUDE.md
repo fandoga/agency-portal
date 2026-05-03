@@ -369,9 +369,8 @@ const agencyId = searchParams?.get("agency_id");
 ## 🛠️ Команды
 
 ```bash
-npm run dev      # Разработка (webpack)
-npm run build    # Сборка
-npm run start    # Production
+npm run dev # Не использовать
+npm run build    # Сборка и проверка билда
 npm run lint     # Линтинг
 ```
 

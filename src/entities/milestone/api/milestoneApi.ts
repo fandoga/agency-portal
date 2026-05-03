@@ -4,6 +4,7 @@ import {
   CreateMilestoneInput,
   DeleteMilestoneArg,
   Milestone,
+  UpdateMilestoneStatusArg,
 } from "../lib/types";
 
 export const milestoneApi = baseApi.injectEndpoints({
@@ -89,8 +90,46 @@ export const milestoneApi = baseApi.injectEndpoints({
         "Project",
       ],
     }),
+    // 3. Обновление статуса задачи
+    updateMilestoneStatus: build.mutation<Milestone, UpdateMilestoneStatusArg>({
+      queryFn: async ({ milestoneId, projectId, agency_id, status }) => {
+        const { data: userData, error: userErr } =
+          await supabase.auth.getUser();
+        if (userErr) return { error: userErr };
+        if (!userData.user) return { error: { message: "Not authenticated" } };
+
+        const { data: project, error: pErr } = await supabase
+          .from("projects")
+          .select("id")
+          .eq("id", projectId)
+          .eq("agency_id", agency_id)
+          .single();
+
+        if (pErr || !project) {
+          return { error: { message: "Проект не найден или нет доступа" } };
+        }
+
+        const { data, error } = await supabase
+          .from("milestones")
+          .update({ status })
+          .eq("id", milestoneId)
+          .eq("project_id", projectId)
+          .select()
+          .single();
+
+        if (error) return { error };
+        return { data };
+      },
+      invalidatesTags: (result, err, arg) => [
+        { type: "Project" as const, id: arg.projectId },
+        "Project",
+      ],
+    }),
   }),
 });
 
-export const { useCreateNewMilestoneMutation, useDeleteMilestoneMutation } =
-  milestoneApi;
+export const {
+  useCreateNewMilestoneMutation,
+  useDeleteMilestoneMutation,
+  useUpdateMilestoneStatusMutation,
+} = milestoneApi;

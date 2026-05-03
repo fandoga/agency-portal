@@ -24,3 +24,7 @@ export type DeleteMilestoneArg = {
   milestoneId: string;
   projectId: string;
 };
+
+export type UpdateMilestoneStatusArg = DeleteMilestoneArg & {
+  status: MilestoneStatus;
+};
