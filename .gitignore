@@ -13,6 +13,10 @@
 # testing
 /coverage
 
+# Kiro Ai 
+/.kiro
+/.kiro_tmp
+
 # next.js
 /.next/
 /out/
