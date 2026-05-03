@@ -242,7 +242,7 @@ export function OrganizationSettingsForm({
               src={logoUrl}
               alt="Предпросмотр логотипа"
               fill
-              className="object-cover rounded-full p-2"
+              className="object-cover rounded-full bg-border"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src =

@@ -38,7 +38,7 @@ const CreateAgencyModal: React.FC<CreateAgencyModalType> = ({
           <Button
             variant={variant || "default"}
             size={"sm"}
-            className={`${variant !== "outline" && "rounded-full"}w-full`}
+            className={`${variant !== "outline" && "rounded-full"} w-full`}
           >
             {text}
           </Button>
