@@ -3,8 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 
-export interface ProfileBadgeProps
-  extends React.ComponentPropsWithoutRef<"div"> {
+export interface ProfileBadgeProps extends React.ComponentPropsWithoutRef<"div"> {
   logo: string;
   name: string;
   hasDrodown?: boolean;

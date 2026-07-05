@@ -4,6 +4,7 @@ import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: fakeBaseQuery(),
+  keepUnusedDataFor: 300,
   tagTypes: ["Profile", "Project", "Milestone", "Report", "Members"], // Для автоматического обновления данных
   endpoints: () => ({}),
 });

@@ -60,13 +60,6 @@ const ProjectDescription = ({ project }: { project: Project }) => {
 
   const { selectedAgencyId } = useGetAgencyData();
 
-  const sortedMilestones = project.milestones?.toSorted((a, b) => {
-    const dateA = a.due_date ? new Date(a.due_date).getTime() : 0;
-    const dateB = b.due_date ? new Date(b.due_date).getTime() : 0;
-
-    return dateA - dateB;
-  });
-
   return (
     <div>
       <p>{project.description}</p>
@@ -74,7 +67,7 @@ const ProjectDescription = ({ project }: { project: Project }) => {
         <div className="pb-3">
           <Separator className="my-3" />
           <ul className="list-none p-0 m-0 space-y-2">
-            {sortedMilestones?.map((mile) => {
+            {project.milestones?.map((mile) => {
               const mileStatus = mile.status ?? "todo";
               const statusOption =
                 milestoneStatusByValue[mileStatus] ??
