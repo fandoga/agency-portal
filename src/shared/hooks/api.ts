@@ -8,7 +8,10 @@ export const useGetAgencyData = () => {
   const searchParams = useSearchParams();
   const { session: authSession } = useAuth();
   const { data, isLoading } = useGetAgencyQuery(authSession?.user?.id, {
-    refetchOnMountOrArgChange: true,
+    skip: !authSession?.user?.id,
+    refetchOnMountOrArgChange: false,
+    refetchOnFocus: false,
+    refetchOnReconnect: false,
   });
   if (!data) {
     return {

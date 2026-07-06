@@ -67,7 +67,6 @@ export const profileApi = baseApi.injectEndpoints({
         if (error) return { error };
         return { data };
       },
-      keepUnusedDataFor: 300,
       providesTags: ["Profile"],
     }),
     // 4. Обновление настроек организации

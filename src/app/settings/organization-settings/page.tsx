@@ -1,9 +1,6 @@
 import { Suspense } from "react";
-import { connection } from "next/server";
 import { SettingsOrgPage } from "@/src/page/settings/SettingsOrgPage";
 import { Spinner } from "@/components/ui/spinner";
-
-export const dynamic = "force-dynamic";
 
 function Loading() {
   return (
@@ -13,9 +10,7 @@ function Loading() {
   );
 }
 
-export default async function OrganizationSettingsPage() {
-  await connection();
-
+export default function OrganizationSettingsPage() {
   return (
     <Suspense fallback={<Loading />}>
       <SettingsOrgPage />

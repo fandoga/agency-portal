@@ -18,6 +18,7 @@ const ProfileBadge: React.FC<ProfileBadgeProps> = ({
   className,
   ...props
 }) => {
+  console.log(logo);
   return (
     <div
       className={cn(
